@@ -24,21 +24,21 @@ export type Testimonial = {
 export const testimonials: Testimonial[] = [
   {
     quote:
-      "Sam took our half-formed idea and turned it into a platform that actually works. He handled everything — backend, payments, the lot — and shipped ahead of schedule.",
-    name: "Maya Brennan",
-    role: "Founder, Loop Goods",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    name: "Jane Doe",
+    role: "Founder, Company",
   },
   {
     quote:
-      "Working with Sam felt refreshingly simple. Clear communication, no jargon, and a finished store our customers find genuinely easy to use.",
-    name: "Daniel Hoffmann",
-    role: "Director, North Press",
+      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    name: "John Smith",
+    role: "Director, Studio",
   },
   {
     quote:
-      "From the database to the front end, Sam built the whole thing himself. The site is fast, looks great, and we've had nothing but compliments.",
-    name: "Priya Anand",
-    role: "Producer, Halcyon Arts",
+      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+    name: "Alex Lee",
+    role: "Producer, Agency",
   },
 ];
 
