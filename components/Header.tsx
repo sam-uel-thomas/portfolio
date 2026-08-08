@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Container from "@/components/Container";
+import LocalTime from "@/components/LocalTime";
+import ScrollProgress from "@/components/ScrollProgress";
 import { site } from "@/content/site";
 
 const links = [
@@ -11,14 +13,34 @@ const links = [
 ];
 
 /**
- * Editorial top bar: wordmark, live availability status, numbered nav and
- * local time. A hairline + blur fade in once the user leaves the hero.
+ * Editorial top bar: wordmark, live availability status, nav and local time.
+ *
+ * It gets out of the way while you're reading down the page and returns the
+ * moment you scroll back up — the nav is there when you go looking for it and
+ * absent when you don't.
  */
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const lastY = useRef(0);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    lastY.current = window.scrollY;
+
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 24);
+
+      const delta = y - lastY.current;
+      // Ignore sub-pixel jitter and rubber-banding at the very top.
+      if (Math.abs(delta) > 6 && y > 120) {
+        setHidden(delta > 0);
+      } else if (y <= 120) {
+        setHidden(false);
+      }
+      lastY.current = y;
+    };
+
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -26,11 +48,11 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ease-editorial ${
+      className={`fixed inset-x-0 top-0 z-50 transition-[transform,background-color,border-color] duration-500 ease-editorial ${
         scrolled
           ? "border-b border-line bg-paper/80 backdrop-blur-md"
           : "border-b border-transparent bg-transparent"
-      }`}
+      } ${hidden ? "-translate-y-full" : "translate-y-0"}`}
     >
       <Container className="relative flex h-14 items-center justify-between">
         <a
@@ -56,13 +78,16 @@ export default function Header() {
             <a
               key={link.href}
               href={link.href}
-              className="u-label transition-colors duration-300 hover:text-ink"
+              className="u-label u-underline transition-colors duration-300 hover:text-ink"
             >
               {link.label}
             </a>
           ))}
+          <LocalTime className="u-label hidden lg:inline" />
         </nav>
       </Container>
+
+      <ScrollProgress />
     </header>
   );
 }

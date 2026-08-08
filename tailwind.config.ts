@@ -18,7 +18,9 @@ const config: Config = {
       fontFamily: {
         // Helvetica everywhere — the Swiss grotesk. Falls back to Arial off-Mac.
         sans: ['"Helvetica Neue"', "Helvetica", "Arial", "sans-serif"],
-        serif: ['"Helvetica Neue"', "Helvetica", "Arial", "sans-serif"],
+        // The accent voice: a high-contrast display serif, used italic and
+        // sparingly. Loaded via next/font in app/layout.tsx.
+        display: ["var(--font-display)", "Georgia", "Times New Roman", "serif"],
         mono: ['"Helvetica Neue"', "Helvetica", "Arial", "sans-serif"],
       },
       letterSpacing: {
@@ -29,6 +31,9 @@ const config: Config = {
       },
       transitionTimingFunction: {
         editorial: "cubic-bezier(0.22, 1, 0.36, 1)",
+      },
+      transitionDuration: {
+        "1200": "1200ms",
       },
       keyframes: {
         "fade-up": {

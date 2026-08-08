@@ -1,9 +1,10 @@
 import Reveal from "@/components/Reveal";
+import TextReveal from "@/components/TextReveal";
 
 type SectionHeadProps = {
   /** Short label, e.g. "Selected Work". */
   label: string;
-  /** Large display statement. */
+  /** Large display statement. Wrap runs in *asterisks* for the serif accent. */
   title: string;
   /** Optional right-aligned meta (count…). */
   meta?: string;
@@ -39,17 +40,16 @@ export default function SectionHead({
           ) : null}
         </div>
       </Reveal>
-      <Reveal delay={80}>
-        <div className="grid grid-cols-4 md:grid-cols-12">
-          <h2
-            className={`col-span-4 mt-8 font-sans text-[clamp(2.25rem,5.5vw,5rem)] font-bold leading-[0.95] tracking-tightest md:mt-10 ${
-              dark ? "text-paper" : "text-ink"
-            } ${titleSpan}`}
-          >
-            {title}
-          </h2>
-        </div>
-      </Reveal>
+      <div className="grid grid-cols-4 md:grid-cols-12">
+        <TextReveal
+          as="h2"
+          text={title}
+          stagger={55}
+          className={`col-span-4 mt-8 font-sans text-[clamp(2.25rem,5.5vw,5rem)] font-bold leading-[0.95] tracking-tightest md:mt-10 ${
+            dark ? "text-paper" : "text-ink"
+          } ${titleSpan}`}
+        />
+      </div>
     </header>
   );
 }

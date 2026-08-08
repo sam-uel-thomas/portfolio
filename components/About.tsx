@@ -1,6 +1,7 @@
 import Reveal from "@/components/Reveal";
 import Section from "@/components/Section";
 import SectionHead from "@/components/SectionHead";
+import TextReveal from "@/components/TextReveal";
 import { about, site } from "@/content/site";
 
 export default function About() {
@@ -8,7 +9,7 @@ export default function About() {
     <Section id="about">
       <SectionHead
         label="About"
-        title="I build the whole thing."
+        title="I build the *whole* thing."
         titleSpan="lg:col-span-8"
       />
 
@@ -16,11 +17,13 @@ export default function About() {
         {/* Statement */}
         <div className="col-span-4 md:col-span-7 lg:col-span-6">
           {about.paragraphs.map((paragraph, index) => (
-            <Reveal key={index} delay={index * 100}>
-              <p className="mb-6 font-sans text-[clamp(1.5rem,2.4vw,2.15rem)] font-medium leading-snug tracking-tight text-ink">
-                {paragraph}
-              </p>
-            </Reveal>
+            <TextReveal
+              key={index}
+              as="p"
+              text={paragraph}
+              stagger={18}
+              className="mb-6 font-sans text-[clamp(1.5rem,2.4vw,2.15rem)] font-medium leading-snug tracking-tight text-ink"
+            />
           ))}
         </div>
 

@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Lenis from "lenis";
+import { lenisRef } from "@/lib/lenis";
 
 /**
  * Initialises Lenis smooth scrolling and routes in-page anchor links through it.
@@ -20,6 +21,9 @@ export default function SmoothScroll({
       easing: (t) => 1 - Math.pow(1 - t, 3), // easeOutCubic
       smoothWheel: true,
     });
+
+    // Published so the intro overlay can freeze scrolling while it's up.
+    lenisRef.current = lenis;
 
     let frame = 0;
     const raf = (time: number) => {
@@ -51,6 +55,7 @@ export default function SmoothScroll({
       cancelAnimationFrame(frame);
       document.removeEventListener("click", onClick);
       lenis.destroy();
+      lenisRef.current = null;
     };
   }, []);
 

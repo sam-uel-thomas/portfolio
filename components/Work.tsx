@@ -8,8 +8,8 @@ export default function Work() {
     <Section id="work">
       <SectionHead
         label="Work"
-        title="Selected works."
-        meta={`(0${projects.length})`}
+        title="Selected *works*."
+        meta={`(${String(projects.length).padStart(2, "0")})`}
       />
       <WorkIndex projects={projects} />
     </Section>

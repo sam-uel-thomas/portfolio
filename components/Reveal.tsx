@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useIntroReady } from "@/components/Intro";
 
 type RevealProps = {
   children: React.ReactNode;
@@ -8,6 +9,14 @@ type RevealProps = {
   delay?: number;
   className?: string;
   as?: keyof JSX.IntrinsicElements;
+  /**
+   * "view"  — reveal when scrolled into view (default).
+   * "intro" — reveal once the intro sequence has finished. Use for anything
+   *           above the fold: the observer deliberately ignores the bottom
+   *           slice of the viewport, so first-screen content sitting near the
+   *           fold would otherwise wait for a scroll that may never come.
+   */
+  start?: "view" | "intro";
 };
 
 /**
@@ -19,11 +28,14 @@ export default function Reveal({
   delay = 0,
   className = "",
   as: Tag = "div",
+  start = "view",
 }: RevealProps) {
   const ref = useRef<HTMLElement | null>(null);
   const [visible, setVisible] = useState(false);
+  const introReady = useIntroReady();
 
   useEffect(() => {
+    if (start !== "view") return;
     const node = ref.current;
     if (!node) return;
 
@@ -45,15 +57,16 @@ export default function Reveal({
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, []);
+  }, [start]);
 
   const Component = Tag as React.ElementType;
+  const isVisible = start === "intro" ? introReady : visible;
 
   return (
     <Component
       ref={ref}
       style={delay ? { transitionDelay: `${delay}ms` } : undefined}
-      className={`reveal ${visible ? "is-visible" : ""} ${className}`.trim()}
+      className={`reveal ${isVisible ? "is-visible" : ""} ${className}`.trim()}
     >
       {children}
     </Component>

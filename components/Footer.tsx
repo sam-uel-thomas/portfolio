@@ -1,4 +1,6 @@
 import Container from "@/components/Container";
+import LocalTime from "@/components/LocalTime";
+import Magnetic from "@/components/Magnetic";
 import { site, socials } from "@/content/site";
 
 const nav = [
@@ -10,19 +12,17 @@ const nav = [
 export default function Footer() {
   return (
     <footer className="bg-ink text-paper">
-      <Container className="py-12 md:py-20">
+      <Container className="py-12 md:py-16">
         <div className="grid grid-cols-4 gap-y-9 md:grid-cols-12 md:gap-x-5 md:gap-y-12">
-          {/* Wordmark + colophon */}
+          {/* Colophon */}
           <div className="col-span-4 md:col-span-5">
+            <p className="u-label text-paper/40">{site.role}</p>
             <a
-              href="#top"
-              className="font-sans text-3xl font-bold tracking-tight text-paper transition-opacity duration-300 hover:opacity-60 sm:text-4xl md:text-5xl"
+              href={`mailto:${site.email}`}
+              className="u-underline mt-4 inline-block text-lg text-paper"
             >
-              {site.name}
+              {site.email}
             </a>
-            <p className="u-label mt-5 max-w-xs leading-relaxed text-paper/40">
-              {site.role}
-            </p>
           </div>
 
           {/* Index */}
@@ -33,7 +33,7 @@ export default function Footer() {
                 <li key={item.href}>
                   <a
                     href={item.href}
-                    className="text-sm text-paper transition-opacity duration-300 hover:opacity-60"
+                    className="u-underline text-sm text-paper"
                   >
                     {item.label}
                   </a>
@@ -52,7 +52,7 @@ export default function Footer() {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-paper transition-opacity duration-300 hover:opacity-60"
+                    className="u-underline text-sm text-paper"
                   >
                     {social.label}
                   </a>
@@ -63,24 +63,39 @@ export default function Footer() {
 
           {/* Back to top */}
           <div className="col-span-4 md:col-span-2 md:col-start-11 md:text-right">
-            <a
-              href="#top"
-              className="group u-label inline-flex items-center gap-2 text-paper/60 transition-colors duration-300 hover:text-paper"
-            >
-              Back to top
-              <span className="transition-transform duration-300 ease-editorial group-hover:-translate-y-1">
-                ↑
-              </span>
-            </a>
+            <Magnetic strength={0.3} className="inline-block">
+              <a
+                href="#top"
+                className="group u-label inline-flex items-center gap-2 text-paper/60 transition-colors duration-300 hover:text-paper"
+              >
+                Back to top
+                <span className="transition-transform duration-500 ease-editorial group-hover:-translate-y-1">
+                  ↑
+                </span>
+              </a>
+            </Magnetic>
           </div>
         </div>
 
-        {/* Bottom bar */}
-        <div className="mt-10 grid grid-cols-4 gap-y-2 border-t border-paper/15 pt-6 md:mt-24 md:grid-cols-8">
-          <span className="u-label col-span-2 text-paper/50 md:col-span-4">
-            © 2026 {site.name}
+        {/* Oversized wordmark — the last thing the page says. Set to fill the
+            measure so it reads as a mark rather than a heading. */}
+        <a
+          href="#top"
+          aria-label="Back to top"
+          className="mt-16 block md:mt-24"
+        >
+          <span className="block whitespace-nowrap text-center font-sans text-[13.5vw] font-bold leading-[0.8] tracking-tightest text-paper transition-opacity duration-500 ease-editorial hover:opacity-70">
+            {site.name}
           </span>
-          <span className="u-label col-span-2 text-right text-paper/50 md:col-span-4 md:text-right">
+        </a>
+
+        {/* Bottom bar */}
+        <div className="mt-10 grid grid-cols-4 gap-y-2 border-t border-paper/15 pt-6 md:grid-cols-12">
+          <span className="u-label col-span-2 text-paper/50 md:col-span-4">
+            © {new Date().getFullYear()} {site.name}
+          </span>
+          <LocalTime className="u-label col-span-4 hidden text-center text-paper/50 md:block" />
+          <span className="u-label col-span-2 text-right text-paper/50 md:col-span-4">
             {site.location}
           </span>
         </div>
