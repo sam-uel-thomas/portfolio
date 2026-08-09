@@ -37,7 +37,8 @@ export const site = {
     "I'm a London-based designer and *full stack* developer.",
   description:
     "I'm a designer and developer building calm, considered digital products with a focus on typography and craft.",
-  email: "samuel.mmthomas@gmail.com",
+  // Forwarded to the personal inbox via Cloudflare Email Routing.
+  email: "hello@madebysamthomas.com",
   location: "London, UK",
   timezone: "Europe/London",
   available: true,
