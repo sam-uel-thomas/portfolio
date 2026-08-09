@@ -35,7 +35,8 @@ Then `npm run build` for a production build and `npm run start` to serve it.
 Almost everything you'll want to change lives in one file:
 [`content/site.ts`](content/site.ts).
 
-- `site` — name, role, tagline, email, timezone, canonical URL (used for metadata / OG)
+- `site` — name, role, tagline, email, timezone (the canonical URL resolves itself,
+  see [Canonical URL](#canonical-url))
 - `motion` — switches for the intro and the marquee
 - `about` — bio paragraphs and the stack list
 - `projects` — the Work rows
@@ -106,5 +107,16 @@ Stock Next.js app — Vercel auto-detects everything.
 npx vercel --prod
 ```
 
-Set `site.url` in `content/site.ts` to the production domain so Open Graph metadata and
-the sitemap resolve correctly.
+### Canonical URL
+
+`site.url` feeds Open Graph, `sitemap.xml` and `robots.txt`. It resolves itself at build
+time rather than being hardcoded, most specific first:
+
+1. `NEXT_PUBLIC_SITE_URL` — set this in the Vercel dashboard once a real domain points
+   here. A bare hostname is fine; the protocol and trailing slash are normalised.
+2. `VERCEL_PROJECT_PRODUCTION_URL` — set automatically by Vercel. Always the production
+   host, so preview deploys don't advertise themselves as canonical.
+3. `http://localhost:3000` for local dev and builds.
+
+So a fresh Vercel deploy has correct metadata with no configuration, and pointing a
+custom domain at it later is one dashboard variable — no code change.

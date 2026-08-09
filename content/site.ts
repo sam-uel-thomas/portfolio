@@ -1,7 +1,36 @@
+/**
+ * The canonical origin, behind Open Graph, the sitemap and robots.txt.
+ *
+ * Resolved at build time, most specific wins:
+ *
+ *  1. `NEXT_PUBLIC_SITE_URL` — set this in the Vercel dashboard once a real
+ *     domain points here, and it overrides everything below.
+ *  2. `VERCEL_PROJECT_PRODUCTION_URL` — the project's stable production host,
+ *     e.g. `portfolio-abc.vercel.app`. Vercel sets it automatically, and it
+ *     stays the *production* host even when a preview build reads it, so
+ *     preview deploys don't advertise themselves as canonical.
+ *  3. localhost, for `next dev` and local builds.
+ *
+ * Only ever read on the server — metadata, sitemap, robots — which is why the
+ * Vercel variable doesn't need a `NEXT_PUBLIC_` prefix to be useful here.
+ */
+function resolveSiteUrl(): string {
+  const vercelHost = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+  const raw =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (vercelHost ? `https://${vercelHost}` : "http://localhost:3000");
+
+  // A bare hostname is the easy thing to paste in, so accept one.
+  const absolute = /^https?:\/\//.test(raw) ? raw : `https://${raw}`;
+  // Trailing slashes would double up in `${site.url}/sitemap.xml`.
+  return absolute.replace(/\/+$/, "");
+}
+
 export const site = {
   name: "Sam Thomas",
   role: "Designer & Developer",
-  url: "https://samthomas.dev", // used for metadata / Open Graph
+  /** Absolute origin, no trailing slash. See resolveSiteUrl above. */
+  url: resolveSiteUrl(),
   // One-line hero description. Wrap words in *asterisks* to set them in the
   // display serif italic — the accent voice. Use it sparingly, 1–2 per page.
   tagline:
