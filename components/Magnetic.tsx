@@ -39,8 +39,11 @@ export default function Magnetic({
 
     const onMove = (event: PointerEvent) => {
       const rect = node.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
+      // The rect includes the transform we're applying, so back it out to get
+      // the element's resting centre. Measuring the displaced centre makes the
+      // element chase its own movement and settle short of `strength`.
+      const cx = rect.left + rect.width / 2 - current.x;
+      const cy = rect.top + rect.height / 2 - current.y;
       const withinX = Math.abs(event.clientX - cx) < rect.width / 2 + padding;
       const withinY = Math.abs(event.clientY - cy) < rect.height / 2 + padding;
 

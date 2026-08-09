@@ -1,3 +1,4 @@
+import Magnetic from "@/components/Magnetic";
 import Reveal from "@/components/Reveal";
 import Section from "@/components/Section";
 import SectionHead from "@/components/SectionHead";
@@ -40,12 +41,19 @@ export default function About() {
               <p className="u-label mb-4 text-paper/50">Stack</p>
               <ul className="grid grid-cols-2 gap-x-4 gap-y-2.5">
                 {about.stack.map((item) => (
-                  <li
-                    key={item}
-                    className="flex items-baseline gap-2 text-base text-paper"
-                  >
-                    <span className="font-mono text-xs text-paper/40">+</span>
-                    {item}
+                  <li key={item}>
+                    {/* Nothing to click — the lean is just a reward for
+                        running the cursor down the list. `w-fit` keeps the
+                        magnet on the text rather than the whole grid cell,
+                        so neighbours don't all react at once. */}
+                    <Magnetic
+                      strength={0.4}
+                      padding={16}
+                      className="flex w-fit items-baseline gap-2 text-base text-paper"
+                    >
+                      <span className="font-mono text-xs text-paper/40">+</span>
+                      {item}
+                    </Magnetic>
                   </li>
                 ))}
               </ul>
