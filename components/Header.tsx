@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import Container from "@/components/Container";
-import LocalTime from "@/components/LocalTime";
 import ScrollProgress from "@/components/ScrollProgress";
 import { site } from "@/content/site";
 
@@ -83,7 +82,6 @@ export default function Header() {
               {link.label}
             </a>
           ))}
-          <LocalTime className="u-label hidden lg:inline" />
         </nav>
       </Container>
 
