@@ -43,33 +43,13 @@ export type Testimonial = {
   role: string;
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// ⚠️  PLACEHOLDER TESTIMONIALS — lorem ipsum, obviously not real quotes.
+// Empty on purpose. The Testimonials section renders nothing while this array
+// is empty, so the live site has no testimonials rather than placeholder ones.
 //
-// Swap in genuine ones (with permission) or empty the array before the site
-// goes anywhere near a job application. The Testimonials section removes itself
-// when the array is empty, so deleting is safe.
-// ─────────────────────────────────────────────────────────────────────────────
-export const testimonials: Testimonial[] = [
-  {
-    quote:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    name: "Jane Doe",
-    role: "Founder, Company",
-  },
-  {
-    quote:
-      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    name: "John Smith",
-    role: "Director, Studio",
-  },
-  {
-    quote:
-      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-    name: "Alex Lee",
-    role: "Producer, Agency",
-  },
-];
+// The section markup and its lorem ipsum stand-ins are preserved on the
+// `testimonials` branch. When real quotes arrive, add them here (with
+// permission) and the section returns on its own — no component changes needed.
+export const testimonials: Testimonial[] = [];
 
 export const about = {
   // Two or three sentences. Keep it editorial — confident, no filler.
