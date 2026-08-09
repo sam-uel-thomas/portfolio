@@ -24,6 +24,13 @@ export const metadata: Metadata = {
     template: `%s — ${site.name}`,
   },
   description: site.description,
+  // The site answers on both the apex and www. Without this, search engines
+  // see two hosts serving identical content and pick a winner themselves;
+  // resolved against metadataBase, it names the production domain as the one
+  // that counts.
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: `${site.name} — ${site.role}`,
     description: site.description,
