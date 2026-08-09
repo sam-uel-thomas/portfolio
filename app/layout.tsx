@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Instrument_Serif } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import Intro from "@/components/Intro";
 import SmoothScroll from "@/components/SmoothScroll";
 import { site } from "@/content/site";
@@ -77,6 +78,13 @@ export default function RootLayout({
         <Intro>
           <SmoothScroll>{children}</SmoothScroll>
         </Intro>
+        {/*
+          Real-user Core Web Vitals, reported from actual visits rather than a
+          synthetic run. Cookieless, and it loads after everything above it, so
+          it can't delay first paint. Only reports on Vercel deployments — it's
+          inert locally.
+        */}
+        <SpeedInsights />
       </body>
     </html>
   );
