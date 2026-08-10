@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Sam Thomas">
+  <rect width="100" height="100" fill="#ffffff"/>
+  <!-- Scaled about the centre so the white reads as a background rather than
+       the blob looking cropped. The path is C1-smooth at every anchor, so the
+       silhouette stays clean when it's rasterised down to 16px. -->
+  <g transform="translate(50 50) scale(0.84) translate(-50 -50)">
+    <path
+      d="M58 5C84 8 99 28 94 53C89 78 71 97 46 95C21 93 3 73 5 47C7 21 32 2 58 5Z"
+      fill="#111111"/>
+  </g>
+</svg>
