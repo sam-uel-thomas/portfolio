@@ -1,11 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Sam Thomas">
   <rect width="100" height="100" fill="#ffffff"/>
-  <!-- Scaled about the centre so the white reads as a background rather than
-       the blob looking cropped. The path is C1-smooth at every anchor, so the
-       silhouette stays clean when it's rasterised down to 16px. -->
-  <g transform="translate(50 50) scale(0.84) translate(-50 -50)">
-    <path
-      d="M58 5C84 8 99 28 94 53C89 78 71 97 46 95C21 93 3 73 5 47C7 21 32 2 58 5Z"
-      fill="#111111"/>
+  <g fill="#111111">
+    <!-- Body: 14 anchors joined as Catmull-Rom curves. The two tapering runs
+         come from anchor pairs close in angle at high radius with tucked
+         neighbours either side — evenly spaced anchors only ever undulate. -->
+    <path d="M78.8 50.3C81.5 57 83.1 62.5 83.2 66.2C83.3 70 82.7 73.2 79.2 74C75.7 74.8 65.7 70.3 61 71.2C56.3 72.2 53 79.7 49.3 79.9C45.6 80.1 41.9 73.7 37.8 72.4C33.7 71 26.4 73.9 23.4 71.5C20.4 69.1 19.3 61.4 18.8 57.3C18.3 53.1 21.3 49.5 20.1 45.1C18.8 40.7 11.5 33.1 11 29.5C10.6 25.8 13.2 22.9 17.1 21.9C21 21 30.7 24.9 35.6 23.6C40.5 22.4 43.3 14 48.2 14C53 14.1 61.4 18.3 66.3 24C71.1 29.8 76.1 43.7 78.8 50.3Z"/>
+    <!-- Thrown droplets. Kept chunky enough to survive rasterisation: below
+         about 5 units they turn to mush at 16px. -->
+    <ellipse cx="80.5" cy="86" rx="8.5" ry="7.5"/>
+    <circle cx="88" cy="30" r="5.5"/>
   </g>
 </svg>
