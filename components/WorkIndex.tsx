@@ -191,7 +191,11 @@ export default function WorkIndex({ projects }: { projects: Project[] }) {
 
                 <span
                   aria-hidden="true"
-                  className="hidden text-right text-xl text-ink opacity-60 transition-all duration-500 ease-editorial group-hover:translate-x-1 group-hover:text-paper group-hover:opacity-100 md:col-span-1 md:block md:pt-2"
+                  /* Travels inward, mirroring the title's +2. The row clips at
+                     `overflow-hidden` and the arrow already sits flush to that
+                     edge, so any outward nudge takes it out of frame — and the
+                     pair converging reads better than both sliding right. */
+                  className="hidden text-right text-xl text-ink opacity-60 transition-[transform,color,opacity] duration-500 ease-editorial group-hover:-translate-x-2 group-hover:text-paper group-hover:opacity-100 md:col-span-1 md:block md:pt-2"
                 >
                   {isLink ? "↗" : "◦"}
                 </span>

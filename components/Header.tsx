@@ -77,7 +77,7 @@ export default function Header() {
             <a
               key={link.href}
               href={link.href}
-              className="u-label u-underline transition-colors duration-300 hover:text-ink"
+              className="u-label u-underline hover:text-ink"
             >
               {link.label}
             </a>

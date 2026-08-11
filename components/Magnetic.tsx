@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { damp, hasFinePointer, prefersReducedMotion } from "@/lib/motion";
+import {
+  hasFinePointer,
+  prefersReducedMotion,
+  stepSpring,
+  type SpringAxis,
+} from "@/lib/motion";
 
 type MagneticProps = {
   children: React.ReactNode;
@@ -32,7 +37,10 @@ export default function Magnetic({
     if (!hasFinePointer() || prefersReducedMotion()) return;
 
     const target = { x: 0, y: 0 };
-    const current = { x: 0, y: 0 };
+    const current: Record<"x" | "y", SpringAxis> = {
+      x: { value: 0, velocity: 0 },
+      y: { value: 0, velocity: 0 },
+    };
     let frame = 0;
     let lastTime = performance.now();
     let idle = true;
@@ -42,8 +50,8 @@ export default function Magnetic({
       // The rect includes the transform we're applying, so back it out to get
       // the element's resting centre. Measuring the displaced centre makes the
       // element chase its own movement and settle short of `strength`.
-      const cx = rect.left + rect.width / 2 - current.x;
-      const cy = rect.top + rect.height / 2 - current.y;
+      const cx = rect.left + rect.width / 2 - current.x.value;
+      const cy = rect.top + rect.height / 2 - current.y.value;
       const withinX = Math.abs(event.clientX - cx) < rect.width / 2 + padding;
       const withinY = Math.abs(event.clientY - cy) < rect.height / 2 + padding;
 
@@ -67,15 +75,19 @@ export default function Magnetic({
       const dt = Math.min((now - lastTime) / 1000, 0.05);
       lastTime = now;
 
-      current.x = damp(current.x, target.x, 10, dt);
-      current.y = damp(current.y, target.y, 10, dt);
-      node.style.transform = `translate3d(${current.x}px, ${current.y}px, 0)`;
+      stepSpring(current.x, target.x, dt);
+      stepSpring(current.y, target.y, dt);
+      node.style.transform = `translate3d(${current.x.value}px, ${current.y.value}px, 0)`;
 
+      // Velocity has to be spent too, or the loop cuts out mid-overshoot and
+      // the element stops a pixel or two past where it started.
       const settled =
-        Math.abs(current.x - target.x) < 0.05 &&
-        Math.abs(current.y - target.y) < 0.05 &&
         target.x === 0 &&
-        target.y === 0;
+        target.y === 0 &&
+        Math.abs(current.x.value) < 0.05 &&
+        Math.abs(current.y.value) < 0.05 &&
+        Math.abs(current.x.velocity) < 0.5 &&
+        Math.abs(current.y.velocity) < 0.5;
 
       if (settled) {
         node.style.transform = "";

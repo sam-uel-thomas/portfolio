@@ -56,19 +56,19 @@ export default function Hero() {
         {/* Bottom row. Sits right on the fold, so it waits for the intro
             rather than for a scroll that may never happen. */}
         <Reveal start="intro">
-          <div className="grid grid-cols-4 items-end border-t border-ink/15 pt-6 md:grid-cols-12">
+          {/* Availability lives in the header, where it stays visible past the
+              fold. Repeating it down here only drew attention to how little
+              else this row was carrying. */}
+          <div className="border-t border-ink/15 pt-6">
             <a
               href="#work"
-              className="group u-label col-span-2 flex items-center gap-3 transition-colors duration-300 hover:text-ink md:col-span-6"
+              className="group u-label flex w-fit items-center gap-3 transition-colors duration-300 hover:text-ink"
             >
               <span className="relative block h-8 w-px overflow-hidden bg-ink/30">
                 <span className="absolute inset-x-0 top-0 h-1/2 animate-scrollcue bg-ink" />
               </span>
               Scroll to explore
             </a>
-            <span className="u-label col-span-2 text-right md:col-span-6">
-              {site.availabilityLabel}
-            </span>
           </div>
         </Reveal>
       </Container>
