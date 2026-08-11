@@ -85,7 +85,7 @@ export const about = {
   // Two or three sentences. Keep it editorial — confident, no filler.
   paragraphs: [
     "I’m a full-stack developer with an eye for design. I build web apps, online stores, and sites end to end — backend included.",
-    "Most recently I led development on *PRNTRS*, taking a print platform white-label: multi-tenant architecture, billing, and the artwork pipeline, across both frontend and backend.",
+    "Most recently I led development on *PRNTRS*, a white-label SaaS that lets print studios stand up a full online presence of their own. I built the multi-tenant architecture, the billing, and the artwork pipeline — frontend and backend.",
     "Most of my work is for independent makers, artists, and small businesses who want something built well, without the agency overhead.",
   ],
   // Stack listed cleanly.
