@@ -67,7 +67,7 @@ export default function Hero() {
               <span className="relative block h-8 w-px overflow-hidden bg-ink/30">
                 <span className="absolute inset-x-0 top-0 h-1/2 animate-scrollcue bg-ink" />
               </span>
-              Scroll to explore
+              Scroll to see more
             </a>
           </div>
         </Reveal>

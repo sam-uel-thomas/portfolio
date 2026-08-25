@@ -34,9 +34,9 @@ export const site = {
   // One-line hero description. Wrap words in *asterisks* to set them in the
   // display serif italic — the accent voice. Use it sparingly, 1–2 per page.
   tagline:
-    "I'm a London-based designer and *full stack* developer.",
+    "I'm a London-based designer and *full-stack* developer.",
   description:
-    "I'm a designer and developer building calm, considered digital products with a focus on typography and craft.",
+    "I'm a freelance designer and developer, focused on building clean, well-designed systems from end to end.",
   // Forwarded to the personal inbox via Cloudflare Email Routing.
   email: "hello@madebysamthomas.com",
   location: "London, UK",
@@ -59,11 +59,9 @@ export const motion = {
 
 /** Ticker strip content. Kept short — it reads at a glance while moving. */
 export const marqueeItems = [
-  "Full stack development",
-  "Product design",
+  "Full-stack developer",
   "Available for work",
   "London, UK",
-  "Design engineering",
 ];
 
 export type Testimonial = {
@@ -84,9 +82,9 @@ export const testimonials: Testimonial[] = [];
 export const about = {
   // Two or three sentences. Keep it editorial — confident, no filler.
   paragraphs: [
-    "I’m a full-stack developer with an eye for design. I build web apps, online stores, and sites end to end — backend included.",
-    "Most recently I led development on *PRNTRS*, a white-label SaaS that lets print studios stand up a full online presence of their own. I built the multi-tenant architecture, the billing, and the artwork pipeline — frontend and backend.",
-    "Most of my work is for independent makers, artists, and small businesses who want something built well, without the agency overhead.",
+    "I'm a full-stack developer with an eye for design. I build anything from web apps to e-commerce, backend included.",
+    "Most recently I led development on *PRNTRS*, a white-label SaaS that lets print studios quickly create an online presence with a working backend system.",
+    "I love working with smaller independent makers, artists and businesses who want a well-designed product without the agency overhead.",
   ],
   // Stack listed cleanly.
   stack: [
@@ -117,7 +115,7 @@ export const projects: Project[] = [
   {
     title: "PRNTRS",
     description:
-      "A print studio operating system, built white-label out of PrintDays. Independent print businesses get their own branded storefront, artwork pipeline and fulfilment workflow — orders in, print-ready files out.",
+      "A print studio operating system, built white-label out of PrintDays. Independent print businesses get their own branded storefront, with a fully functional backend system. Able to be set up in less than 10 minutes.",
     role: "Lead Developer",
     href: "",
     status: "in-development",
@@ -133,7 +131,7 @@ export const projects: Project[] = [
   {
     title: "Pollan",
     description:
-      "A SaaS platform that lets independent sellers create products, events, and shops — all shareable with a single link.",
+      "A SaaS platform that lets independent sellers create products, events, and shops, all sellable with a single link.",
     role: "Backend Developer",
     href: "https://pollan.co/",
     image: "/work/pollan.webp",
@@ -142,7 +140,7 @@ export const projects: Project[] = [
   {
     title: "PrintDays",
     description:
-      "A print ordering platform built for seamless end-to-end ordering and fulfilment.",
+      "A print company platform, with both a customer-facing frontend and a dashboard for admins to track orders and finances.",
     role: "Full-Stack Developer",
     href: "https://printdays.co.uk/",
     image: "/work/printdays.webp",
@@ -151,7 +149,7 @@ export const projects: Project[] = [
   {
     title: "Prologue Opera",
     description:
-      "A site for Prologue Opera, a contemporary opera company based in the South Coast.",
+      "A site for Prologue Opera, an independent opera company based on the South Coast. Built with a fully functional CMS and a hand-crafted website builder.",
     role: "Full-Stack Developer",
     href: "https://prologueopera.com/",
     image: "/work/prologue-opera.webp",
@@ -161,5 +159,5 @@ export const projects: Project[] = [
 
 export const socials = [
   { label: "GitHub", handle: "sam-uel-thomas", href: "https://github.com/sam-uel-thomas" },
-  { label: "LinkedIn", handle: "in/samthomas", href: "https://www.linkedin.com/" },
+  { label: "LinkedIn", handle: "in/sam-thomas-45a956293", href: "https://www.linkedin.com/in/sam-thomas-45a956293" },
 ];

@@ -68,7 +68,7 @@ export default function Footer() {
                 href="#top"
                 className="group u-label inline-flex items-center gap-2 text-paper/60 transition-colors duration-300 hover:text-paper"
               >
-                Back to top
+                Back to the top
                 <span className="transition-transform duration-500 ease-editorial group-hover:-translate-y-1">
                   ↑
                 </span>
@@ -78,13 +78,20 @@ export default function Footer() {
         </div>
 
         {/* Oversized wordmark — the last thing the page says. Set to fill the
-            measure so it reads as a mark rather than a heading. */}
+            measure so it reads as a mark rather than a heading.
+
+            Sized in `cqw`, not `vw`: the Container caps at 1680px and carries
+            side padding, so viewport units kept growing after the box stopped.
+            Past ~2000px the line outgrew its measure, and because a centred
+            nowrap line pins to the start edge, the whole overflow ran off to
+            the right. Container units track the box itself, so it fills the
+            measure at every width and can't outrun it. */}
         <a
           href="#top"
-          aria-label="Back to top"
-          className="mt-16 block md:mt-24"
+          aria-label="Back to the top"
+          className="mt-16 block [container-type:inline-size] md:mt-24"
         >
-          <span className="block whitespace-nowrap text-center font-sans text-[13.5vw] font-bold leading-[0.8] tracking-tightest text-paper transition-opacity duration-500 ease-editorial hover:opacity-70">
+          <span className="block whitespace-nowrap text-center font-sans text-[17cqw] font-bold leading-[0.8] tracking-tightest text-paper transition-opacity duration-500 ease-editorial hover:opacity-70">
             {site.name}
           </span>
         </a>

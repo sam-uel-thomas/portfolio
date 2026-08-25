@@ -17,7 +17,7 @@ export default function Contact() {
             <Magnetic strength={0.18} padding={20} className="inline-block">
               <a
                 href={`mailto:${site.email}`}
-                className="group inline-flex max-w-full items-baseline gap-3 break-words font-sans text-[clamp(1.5rem,5.5vw,4.5rem)] font-bold leading-[0.95] tracking-tightest text-ink"
+                className="group inline-flex max-w-full items-baseline gap-3 break-words font-sans text-[clamp(1rem,5.5vw,4.5rem)] font-bold leading-[0.95] tracking-tightest text-ink"
               >
                 <span className="u-underline pb-1">{site.email}</span>
                 <span
