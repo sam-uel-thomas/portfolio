@@ -1,8 +1,8 @@
 import Magnetic from "@/components/Magnetic";
 import Reveal from "@/components/Reveal";
+import ScrubText from "@/components/ScrubText";
 import Section from "@/components/Section";
 import SectionHead from "@/components/SectionHead";
-import TextReveal from "@/components/TextReveal";
 import { about, site } from "@/content/site";
 
 /**
@@ -21,18 +21,12 @@ export default function About() {
       />
 
       <div className="grid grid-cols-4 gap-y-14 md:grid-cols-12 md:gap-x-5">
-        {/* Statement */}
-        <div className="col-span-4 md:col-span-7 lg:col-span-6">
-          {about.paragraphs.map((paragraph, index) => (
-            <TextReveal
-              key={index}
-              as="p"
-              text={paragraph}
-              stagger={18}
-              className="mb-6 font-sans text-[clamp(1.5rem,2.4vw,2.15rem)] font-medium leading-snug tracking-tight text-paper"
-            />
-          ))}
-        </div>
+        {/* Statement — fills in word by word with the scroll, and empties
+            again on the way back up, so it reads at the visitor's pace. */}
+        <ScrubText
+          paragraphs={about.paragraphs}
+          className="col-span-4 font-sans text-[clamp(1.5rem,2.4vw,2.15rem)] font-medium leading-snug tracking-tight text-paper md:col-span-7 lg:col-span-6"
+        />
 
         {/* Meta column */}
         <div className="col-span-4 md:col-span-4 md:col-start-9">
@@ -51,7 +45,7 @@ export default function About() {
                       padding={16}
                       className="flex w-fit items-baseline gap-2 text-base text-paper"
                     >
-                      <span className="font-mono text-xs text-paper/40">+</span>
+                      <span className="text-xs text-paper/40">+</span>
                       {item}
                     </Magnetic>
                   </li>

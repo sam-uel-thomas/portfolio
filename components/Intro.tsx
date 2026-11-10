@@ -16,6 +16,35 @@ export function useIntroReady() {
   return useContext(IntroContext);
 }
 
+/**
+ * The same signal, for things that animate in off the back of it — held back
+ * until the component has been on screen for a frame.
+ *
+ * The intro only plays once a session. Arrive at a page by a link from another
+ * one and it's long finished, so a component mounting there would be born
+ * already in its end state and simply appear. Waiting a painted frame gives
+ * the transition a hidden state to start from, so it plays on every arrival.
+ */
+export function useIntroStart() {
+  const ready = useContext(IntroContext);
+  const [painted, setPainted] = useState(false);
+
+  useEffect(() => {
+    // Two frames: the first callback can land before the hidden state has
+    // actually been painted, and a transition needs something to move from.
+    let second = 0;
+    const first = requestAnimationFrame(() => {
+      second = requestAnimationFrame(() => setPainted(true));
+    });
+    return () => {
+      cancelAnimationFrame(first);
+      cancelAnimationFrame(second);
+    };
+  }, []);
+
+  return ready && painted;
+}
+
 const SESSION_KEY = "intro-played";
 
 type Phase = "deciding" | "playing" | "done";

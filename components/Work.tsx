@@ -9,7 +9,6 @@ export default function Work() {
       <SectionHead
         label="Work"
         title="Selected *works*."
-        meta={`(${String(projects.length).padStart(2, "0")})`}
       />
       <WorkIndex projects={projects} />
     </Section>

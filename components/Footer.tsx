@@ -1,12 +1,16 @@
 import Container from "@/components/Container";
 import LocalTime from "@/components/LocalTime";
 import Magnetic from "@/components/Magnetic";
+import SectionLink from "@/components/SectionLink";
+import SpringyWordmark from "@/components/SpringyWordmark";
 import { site, socials } from "@/content/site";
 
+// Home page sections — SectionLink gets to them from any page.
 const nav = [
-  { label: "Work", href: "#work" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Work", section: "work" },
+  { label: "Services", section: "services" },
+  { label: "About", section: "about" },
+  { label: "Contact", section: "contact" },
 ];
 
 export default function Footer() {
@@ -30,13 +34,13 @@ export default function Footer() {
             <p className="u-label mb-4 text-paper/40">Index</p>
             <ul className="space-y-2.5">
               {nav.map((item) => (
-                <li key={item.href}>
-                  <a
-                    href={item.href}
+                <li key={item.section}>
+                  <SectionLink
+                    section={item.section}
                     className="u-underline text-sm text-paper"
                   >
                     {item.label}
-                  </a>
+                  </SectionLink>
                 </li>
               ))}
             </ul>
@@ -85,15 +89,17 @@ export default function Footer() {
             Past ~2000px the line outgrew its measure, and because a centred
             nowrap line pins to the start edge, the whole overflow ran off to
             the right. Container units track the box itself, so it fills the
-            measure at every width and can't outrun it. */}
+            measure at every width and can't outrun it.
+
+            The letters rise out of a mask once the footer is uncovered and
+            hop under the cursor. The row carries 0.3em of headroom above the
+            letters for those hops, so the margin here is trimmed to match. */}
         <a
           href="#top"
           aria-label="Back to the top"
-          className="mt-16 block [container-type:inline-size] md:mt-24"
+          className="mt-10 block text-paper md:mt-8"
         >
-          <span className="block whitespace-nowrap text-center font-sans text-[17cqw] font-bold leading-[0.8] tracking-tightest text-paper transition-opacity duration-500 ease-editorial hover:opacity-70">
-            {site.name}
-          </span>
+          <SpringyWordmark text={site.name} />
         </a>
 
         {/* Bottom bar */}

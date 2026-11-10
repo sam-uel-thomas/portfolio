@@ -57,6 +57,61 @@ export const motion = {
   marquee: true,
 };
 
+/**
+ * The hero subheading: a fixed lead, then a last word that rolls through the
+ * list. Keep the words short and parallel — they all have to finish the same
+ * sentence, and the longest one sets how far the line can grow.
+ */
+export const heroRoll = {
+  lead: "I design and build",
+  // `shows` is the title of the project that backs the word up: the hero
+  // brings that project's screenshot to the front while the word is showing.
+  // It has to match a title in `projects` below.
+  words: [
+    { word: "web apps", shows: "PrintDays" },
+    { word: "online shops", shows: "Pollan" },
+    { word: "SaaS platforms", shows: "PRNTRS" },
+    { word: "dashboards", shows: "PrintDays" },
+    { word: "storefronts", shows: "PRNTRS" },
+  ],
+};
+
+export type Service = {
+  title: string;
+  /** One sentence. Shown in the detail panel, and inline on touch. */
+  summary: string;
+  /** What someone actually gets — short, noun-first. Two columns, so even counts sit best. */
+  deliverables: string[];
+};
+
+// TODO(sam): first-draft copy — rewrite in your own words.
+export const services: Service[] = [
+  {
+    title: "Design",
+    summary:
+      "Interfaces and sites designed by the person who’ll build them, so nothing gets lost in the handover.",
+    deliverables: ["Interface design", "Design systems", "Prototypes", "Figma to code"],
+  },
+  {
+    title: "Frontend",
+    summary:
+      "Fast, responsive front ends in React and Next.js, with the motion and detail that make them feel finished.",
+    deliverables: ["Next.js sites", "Web apps", "Interaction & motion", "Performance"],
+  },
+  {
+    title: "Backend",
+    summary:
+      "APIs, databases, auth and the admin dashboards that keep a business running behind the scenes.",
+    deliverables: ["APIs", "Databases", "Auth & accounts", "Admin dashboards"],
+  },
+  {
+    title: "E-commerce",
+    summary:
+      "Storefronts and checkouts on Stripe, from a single product up to a multi-tenant platform.",
+    deliverables: ["Storefronts", "Stripe & Connect", "Order management", "Multi-tenant SaaS"],
+  },
+];
+
 /** Ticker strip content. Kept short — it reads at a glance while moving. */
 export const marqueeItems = [
   "Full-stack developer",
@@ -97,6 +152,44 @@ export const about = {
   ],
 };
 
+export type CaseImage = {
+  src: string;
+  alt: string;
+  /** Intrinsic pixel size, so the page reserves the space before it loads. */
+  width: number;
+  height: number;
+};
+
+/**
+ * The long version of a project. Giving a project one of these creates its
+ * page at /work/<slug>, and the row in the work index links there instead of
+ * straight out to the live site.
+ */
+export type CaseStudy = {
+  slug: string;
+  year: string;
+  /** The statement under the title. Wrap a run in *asterisks* for the accent. */
+  headline: string;
+  /** The opening image, shown full width under the title. */
+  cover: CaseImage;
+  /** Two or three short paragraphs: what it is, and what your part was. */
+  overview: string[];
+  /** Parts of the product worth showing, each with a screenshot. */
+  features: {
+    label: string;
+    title: string;
+    body: string[];
+    image: CaseImage;
+  }[];
+  /** What you actually built — the engineering, in plain words. */
+  build: {
+    title: string;
+    items: { title: string; body: string }[];
+  };
+  /** A closing line or two on where it stands now. */
+  outcome: string[];
+};
+
 export type Project = {
   title: string;
   description: string;
@@ -109,18 +202,18 @@ export type Project = {
   tags?: string[];
   /** Marks the row as unreleased rather than dead. */
   status?: "live" | "in-development";
+  /** Optional long-form page. See CaseStudy above. */
+  caseStudy?: CaseStudy;
 };
 
 export const projects: Project[] = [
   {
     title: "PRNTRS",
     description:
-      "A print studio operating system, built white-label out of PrintDays. Independent print businesses get their own branded storefront, with a fully functional backend system. Able to be set up in less than 10 minutes.",
+      "A platform for running a print studio online, built white-label out of PrintDays. Each studio gets its own branded storefront, where customers upload artwork and choose paper, size and borders, and a dashboard that follows every order from payment to dispatch.",
     role: "Lead Developer",
-    href: "",
-    status: "in-development",
-    // TODO(sam): add a screenshot at /public/work/prntrs.webp when there's a
-    // shippable screen — until then this row renders a typographic plate.
+    href: "https://prntrs.co/",
+    image: "/work/prntrs.webp",
     tags: [
       "Multi-tenant SaaS",
       "Stripe Connect",

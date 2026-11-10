@@ -13,7 +13,6 @@ export default function Testimonials() {
       <SectionHead
         label="Testimonials"
         title="What clients *say*."
-        meta={`(${String(testimonials.length).padStart(2, "0")})`}
         dark
       />
 

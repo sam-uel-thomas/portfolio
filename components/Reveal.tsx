@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useIntroReady } from "@/components/Intro";
+import { useIntroStart } from "@/components/Intro";
 
 type RevealProps = {
   children: React.ReactNode;
@@ -32,7 +32,7 @@ export default function Reveal({
 }: RevealProps) {
   const ref = useRef<HTMLElement | null>(null);
   const [visible, setVisible] = useState(false);
-  const introReady = useIntroReady();
+  const introReady = useIntroStart();
 
   useEffect(() => {
     if (start !== "view") return;

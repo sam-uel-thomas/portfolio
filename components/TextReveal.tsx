@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment, useEffect, useRef, useState } from "react";
-import { useIntroReady } from "@/components/Intro";
+import { useIntroStart } from "@/components/Intro";
 
 type Part = { text: string; accent: boolean };
 /** One visual word — may be several parts when an accent run ends mid-word. */
@@ -15,7 +15,7 @@ type Word = Part[];
  * of its own, complete with a leading space. So accent runs are resolved first
  * and word boundaries second, letting a single word carry mixed styling.
  */
-function parse(text: string): Word[] {
+export function parseAccentWords(text: string): Word[] {
   const chunks: Part[] = text
     .split(/(\*[^*]+\*)/g)
     .filter(Boolean)
@@ -79,7 +79,7 @@ export default function TextReveal({
 }: TextRevealProps) {
   const ref = useRef<HTMLElement | null>(null);
   const [inView, setInView] = useState(false);
-  const introReady = useIntroReady();
+  const introReady = useIntroStart();
 
   useEffect(() => {
     if (start !== "view") return;
@@ -101,7 +101,7 @@ export default function TextReveal({
   }, [start]);
 
   const visible = start === "intro" ? introReady : inView;
-  const words = parse(text);
+  const words = parseAccentWords(text);
   const Component = Tag as React.ElementType;
 
   return (

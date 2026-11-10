@@ -55,9 +55,11 @@
 }
 
 @layer components {
-  /* Registration label — uppercase, tracked Helvetica, the Swiss caption voice. */
+  /* Caption voice — small, quiet Helvetica in sentence case. It used to be
+     uppercase and widely tracked, which read as a monospaced, technical
+     register the rest of the site doesn't share. */
   .u-label {
-    @apply text-[0.7rem] font-medium uppercase tracking-[0.2em] text-muted;
+    @apply text-[0.8125rem] font-medium leading-snug text-muted;
   }
 
   /* The accent voice. Always italic, always a deliberate exception. */
@@ -151,6 +153,29 @@
     will-change: transform;
   }
 
+  /* ── Case study figures ───────────────────────────────────────────────────
+     The card wipes open from its bottom edge while the picture inside eases
+     back from a slight zoom. Hidden only under `.js`, like the type reveals,
+     so without scripting the images are simply there.                       */
+  .js .fig .fig-mask {
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 1.2s var(--ease-editorial);
+  }
+
+  .js .fig .fig-img {
+    transform: scale(1.12);
+    transition: transform 1.6s var(--ease-editorial);
+    will-change: transform;
+  }
+
+  .js .fig.is-in .fig-mask {
+    clip-path: inset(0 0 0 0);
+  }
+
+  .js .fig.is-in .fig-img {
+    transform: none;
+  }
+
   /* ── Reduced motion ──────────────────────────────────────────────────────
      One place that switches the whole site down to a static, legible page. */
   @media (prefers-reduced-motion: reduce) {
@@ -172,6 +197,13 @@
 
     .marquee-track {
       transform: none !important;
+    }
+
+    .js .fig .fig-mask,
+    .js .fig .fig-img {
+      clip-path: none;
+      transform: none;
+      transition: none;
     }
 
     .animate-fade-up,

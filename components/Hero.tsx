@@ -1,24 +1,42 @@
+"use client";
+
+import { useState } from "react";
 import Container from "@/components/Container";
+import HeroStack from "@/components/HeroStack";
 import Parallax from "@/components/Parallax";
 import Reveal from "@/components/Reveal";
+import RollingWord from "@/components/RollingWord";
 import TextReveal from "@/components/TextReveal";
-import { site } from "@/content/site";
+import { heroRoll, projects, site } from "@/content/site";
+
+// Only projects with a screenshot can be a card.
+const cards = projects.flatMap((project) =>
+  project.image ? [{ title: project.title, image: project.image }] : [],
+);
 
 export default function Hero() {
   const [first, ...rest] = site.name.split(" ");
   const last = rest.join(" ");
 
+  // Which rolling word is showing decides which project is on top of the
+  // stack, so the line makes a claim and the picture beside it backs it up.
+  const [wordIndex, setWordIndex] = useState(0);
+  const active = Math.max(
+    0,
+    cards.findIndex((card) => card.title === heroRoll.words[wordIndex]?.shows),
+  );
+
   return (
     <section id="top" className="relative flex min-h-[100svh] flex-col pt-14">
       <Container className="flex flex-1 flex-col pb-10 pt-24">
-        {/* Name + introduction — vertically centred */}
+        {/* Name + the work — vertically centred */}
         <div className="flex flex-1 items-center">
-          <div className="grid w-full grid-cols-4 items-end gap-y-12 md:grid-cols-12">
-            <div className="col-span-4 md:col-span-9">
+          <div className="grid w-full grid-cols-4 items-center gap-y-14 md:grid-cols-12 md:gap-x-5">
+            <div className="col-span-4 md:col-span-7">
               {/* Lags slightly behind the scroll, so the name sits on a plane
                   just behind the rest of the page as it leaves. */}
               <Parallax speed={0.12}>
-                <h1 className="font-sans text-[clamp(3.5rem,13vw,13rem)] font-bold leading-[0.84] tracking-tightest text-ink">
+                <h1 className="font-sans text-[clamp(3.5rem,11vw,12rem)] font-bold leading-[0.84] tracking-tightest text-ink">
                   <TextReveal
                     as="span"
                     className="block"
@@ -34,21 +52,29 @@ export default function Hero() {
                     delay={240}
                   />
                 </h1>
+
+                {/* Indented to the second line of the name, so it reads as
+                    hanging off "Thomas" rather than as a new block. Arrives
+                    after the name has landed, then starts rolling. */}
+                <Reveal start="intro" delay={700} className="mt-8 pl-[10%] md:mt-10 md:pl-[16%]">
+                  <RollingWord
+                    lead={heroRoll.lead}
+                    words={heroRoll.words.map((item) => item.word)}
+                    stackOnMobile
+                    onIndexChange={setWordIndex}
+                    className="font-sans text-[clamp(1.5rem,2.8vw,2.75rem)] font-medium leading-tight tracking-tight text-ink"
+                  />
+                </Reveal>
               </Parallax>
             </div>
 
-            <Parallax
-              speed={-0.04}
-              className="col-span-4 md:col-span-3 md:self-end"
-            >
-              <TextReveal
-                as="p"
-                className="text-lg leading-relaxed text-ink/80"
-                text={site.tagline}
-                start="intro"
-                delay={520}
-                stagger={28}
-              />
+            {/* The work, in the first screen. Drifts the other way to the
+                name on scroll, so the two separate as the hero leaves. */}
+            <Parallax speed={-0.04} className="col-span-4 md:col-span-5">
+              <HeroStack cards={cards} active={active} className="mx-auto w-[84%] md:w-[90%]" />
+              <Reveal start="intro" delay={900}>
+                <p className="u-label mt-8 text-center text-ink">{cards[active]?.title}</p>
+              </Reveal>
             </Parallax>
           </div>
         </div>

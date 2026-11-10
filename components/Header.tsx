@@ -3,12 +3,20 @@
 import { useEffect, useRef, useState } from "react";
 import Container from "@/components/Container";
 import ScrollProgress from "@/components/ScrollProgress";
+import SectionLink from "@/components/SectionLink";
 import { site } from "@/content/site";
 
+// `wide` links only show from `sm` up: four tracked labels plus the wordmark
+// overrun a phone-width bar, and Services is the one a phone visitor reaches
+// just as easily by scrolling.
+//
+// These are home page sections. SectionLink scrolls to them on the home page
+// and navigates back to them from anywhere else.
 const links = [
-  { label: "Work", href: "#work" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Work", section: "work" },
+  { label: "Services", section: "services", wide: true },
+  { label: "About", section: "about" },
+  { label: "Contact", section: "contact" },
 ];
 
 /**
@@ -54,13 +62,13 @@ export default function Header() {
       } ${hidden ? "-translate-y-full" : "translate-y-0"}`}
     >
       <Container className="relative flex h-14 items-center justify-between">
-        <a
-          href="#top"
+        <SectionLink
+          section="top"
           className="flex shrink-0 items-baseline gap-1 whitespace-nowrap font-sans text-lg font-bold tracking-tight text-ink transition-opacity duration-300 hover:opacity-60"
         >
           {site.name}
-          <sup className="font-mono text-[0.55rem] text-muted">©</sup>
-        </a>
+          <sup className="text-[0.55rem] text-muted">©</sup>
+        </SectionLink>
 
         {site.available ? (
           <div className="pointer-events-none absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-2 lg:flex">
@@ -74,13 +82,13 @@ export default function Header() {
 
         <nav className="flex items-center gap-4 sm:gap-7">
           {links.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="u-label u-underline hover:text-ink"
+            <SectionLink
+              key={link.section}
+              section={link.section}
+              className={`u-label u-underline hover:text-ink ${link.wide ? "hidden sm:inline" : ""}`}
             >
               {link.label}
-            </a>
+            </SectionLink>
           ))}
         </nav>
       </Container>

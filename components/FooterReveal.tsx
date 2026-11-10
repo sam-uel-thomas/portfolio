@@ -1,6 +1,22 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
+
+/**
+ * The spacer at the end of the page flow. Its top edge is where the page
+ * content currently ends, i.e. the line above which the footer is still
+ * covered — so anything in the footer can work out whether it's actually
+ * been uncovered yet.
+ *
+ * Needed because the footer is `position: fixed` at the bottom of the
+ * viewport the whole time. An IntersectionObserver sees it as permanently
+ * on screen, even while the page is sitting on top of it.
+ */
+const FooterSpacerContext = createContext<React.RefObject<HTMLDivElement> | null>(null);
+
+export function useFooterSpacer() {
+  return useContext(FooterSpacerContext);
+}
 
 /**
  * Reveal-on-scroll footer. The footer is fixed behind the page content; a
@@ -14,6 +30,7 @@ export default function FooterReveal({
   children: React.ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const spacerRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
 
   useEffect(() => {
@@ -27,12 +44,12 @@ export default function FooterReveal({
   }, []);
 
   return (
-    <>
+    <FooterSpacerContext.Provider value={spacerRef}>
       {/* Transparent spacer the fixed footer shows through at the bottom. */}
-      <div aria-hidden="true" style={{ height }} />
+      <div ref={spacerRef} aria-hidden="true" style={{ height }} />
       <div ref={ref} className="fixed inset-x-0 bottom-0 z-0">
         {children}
       </div>
-    </>
+    </FooterSpacerContext.Provider>
   );
 }

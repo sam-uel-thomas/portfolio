@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import type { Project } from "@/content/site";
 import { damp, prefersReducedMotion } from "@/lib/motion";
@@ -97,26 +98,32 @@ export default function WorkIndex({ projects }: { projects: Project[] }) {
     <div className="relative">
       {/* Index column headers (desktop) */}
       <div className="hidden grid-cols-12 gap-x-5 border-b border-ink/15 pb-3 md:grid">
-        <span className="u-label col-span-1 pl-3 lg:pl-4">No.</span>
-        <span className="u-label col-span-6">Project</span>
+        <span className="u-label col-span-7 pl-3 lg:pl-4">Project</span>
         <span className="u-label col-span-4">Role</span>
         <span className="u-label col-span-1 text-right">↗</span>
       </div>
 
       {projects.map((project, i) => {
-        const isLink = project.href.startsWith("http");
-        const RowTag = isLink ? "a" : "div";
+        // A project with a case study opens its own page, which carries the
+        // link out to the live site. One without goes straight out. One with
+        // neither is unreleased, and the row is just a row.
+        const caseHref = project.caseStudy ? `/work/${project.caseStudy.slug}` : null;
+        const isExternal = !caseHref && project.href.startsWith("http");
+        const RowTag: React.ElementType = caseHref ? Link : isExternal ? "a" : "div";
+        const glyph = caseHref ? "→" : isExternal ? "↗" : "◦";
 
         return (
           <Reveal key={project.title} delay={i * 70}>
             <RowTag
-              {...(isLink
-                ? {
-                    href: project.href,
-                    target: "_blank",
-                    rel: "noopener noreferrer",
-                  }
-                : {})}
+              {...(caseHref
+                ? { href: caseHref }
+                : isExternal
+                  ? {
+                      href: project.href,
+                      target: "_blank",
+                      rel: "noopener noreferrer",
+                    }
+                  : {})}
               onMouseEnter={() => setActive(i)}
               onMouseLeave={() => setActive(null)}
               className="group relative block overflow-hidden border-b border-line"
@@ -128,20 +135,16 @@ export default function WorkIndex({ projects }: { projects: Project[] }) {
               />
 
               <div className="relative grid grid-cols-4 gap-y-5 py-8 md:grid-cols-12 md:items-baseline md:gap-x-5 md:py-11">
-                {/* Indented off the container edge — flush against the rule it
-                    read as part of the margin rather than as an index. */}
-                <span className="u-label hidden transition-colors duration-500 ease-editorial group-hover:text-paper/50 md:col-span-1 md:block md:pl-3 lg:pl-4">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-
-                <div className="col-span-4 md:col-span-6">
+                {/* Indented off the container edge, so the title has room
+                    inside the ink wash instead of sitting flush against it. */}
+                <div className="col-span-4 md:col-span-7 md:pl-3 lg:pl-4">
                   <h3 className="flex items-baseline gap-3 font-sans text-3xl font-medium tracking-tight text-ink transition-[transform,color] duration-500 ease-editorial group-hover:translate-x-2 group-hover:text-paper md:text-[2.75rem] md:leading-none">
                     {project.title}
                     <span
                       aria-hidden="true"
                       className="text-base text-ink/50 transition-colors duration-500 group-hover:text-paper/50 md:hidden"
                     >
-                      {isLink ? "↗" : "◦"}
+                      {glyph}
                     </span>
                   </h3>
                   <p className="mt-3 max-w-md text-sm leading-relaxed text-muted transition-colors duration-500 ease-editorial group-hover:text-paper/60">
@@ -165,7 +168,7 @@ export default function WorkIndex({ projects }: { projects: Project[] }) {
                   {project.tags?.map((tag) => (
                     <span
                       key={tag}
-                      className="inline-flex items-center py-1 text-[0.65rem] font-medium uppercase tracking-[0.1em] text-ink/35 transition-colors duration-500 ease-editorial group-hover:text-paper/35"
+                      className="inline-flex items-center py-1 text-xs font-medium text-ink/40 transition-colors duration-500 ease-editorial group-hover:text-paper/40"
                     >
                       {tag}
                     </span>
@@ -197,7 +200,7 @@ export default function WorkIndex({ projects }: { projects: Project[] }) {
                      pair converging reads better than both sliding right. */
                   className="hidden text-right text-xl text-ink opacity-60 transition-[transform,color,opacity] duration-500 ease-editorial group-hover:-translate-x-2 group-hover:text-paper group-hover:opacity-100 md:col-span-1 md:block md:pt-2"
                 >
-                  {isLink ? "↗" : "◦"}
+                  {glyph}
                 </span>
               </div>
             </RowTag>
@@ -250,13 +253,18 @@ export default function WorkIndex({ projects }: { projects: Project[] }) {
               describes. Only for rows that actually go somewhere — an
               unreleased project has nothing to view. */}
           <span
-            className={`absolute -left-6 -top-6 flex h-[4.75rem] w-[4.75rem] items-center justify-center rounded-full bg-ink text-[0.62rem] font-medium uppercase tracking-[0.14em] text-paper transition-[opacity,transform] duration-500 ease-editorial ${
-              active !== null && projects[active].href
+            className={`absolute -left-6 -top-6 flex h-[4.75rem] w-[4.75rem] items-center justify-center rounded-full bg-ink text-sm font-medium text-paper transition-[opacity,transform] duration-500 ease-editorial ${
+              active !== null && (projects[active].caseStudy || projects[active].href)
                 ? "scale-100 opacity-100"
                 : "scale-75 opacity-0"
             }`}
           >
-            View
+            {/* Holds its last word while it fades out, so it doesn't flick
+                back to "View" on the way. */}
+            {(active !== null ? projects[active] : prev !== null ? projects[prev] : null)
+              ?.caseStudy
+              ? "Read"
+              : "View"}
           </span>
         </div>
       </div>

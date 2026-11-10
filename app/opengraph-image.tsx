@@ -30,8 +30,6 @@ export default function OpengraphImage() {
             display: "flex",
             justifyContent: "space-between",
             fontSize: 22,
-            letterSpacing: "0.2em",
-            textTransform: "uppercase",
             color: "#6b6b6b",
           }}
         >
@@ -71,8 +69,6 @@ export default function OpengraphImage() {
                 alignItems: "center",
                 gap: 12,
                 fontSize: 22,
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
                 color: "#6b6b6b",
               }}
             >
