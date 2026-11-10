@@ -4,8 +4,12 @@ import TextReveal from "@/components/TextReveal";
 type SectionHeadProps = {
   /** Short label, e.g. "Selected Work". */
   label: string;
-  /** Large display statement. Wrap runs in *asterisks* for the serif accent. */
-  title: string;
+  /**
+   * Large display statement. Wrap runs in *asterisks* for the serif accent.
+   * Leave it out for a section whose content opens with its own big type:
+   * the head shrinks to the ruled label, which becomes the section's heading.
+   */
+  title?: string;
   /** Optional right-aligned meta (count…). */
   meta?: string;
   /** Columns the title should occupy on large screens. */
@@ -23,16 +27,18 @@ export default function SectionHead({
   dark = false,
 }: SectionHeadProps) {
   return (
-    <header className="mb-16 md:mb-24">
+    <header className={title ? "mb-16 md:mb-24" : "mb-10 md:mb-14"}>
       <Reveal>
         <div
           className={`flex items-baseline justify-between border-b pb-4 ${
             dark ? "border-paper/20" : "border-ink/15"
           }`}
         >
-          <span className={`u-label ${dark ? "text-paper" : "text-ink"}`}>
-            {label}
-          </span>
+          {title ? (
+            <span className={`u-label ${dark ? "text-paper" : "text-ink"}`}>{label}</span>
+          ) : (
+            <h2 className={`u-label ${dark ? "text-paper" : "text-ink"}`}>{label}</h2>
+          )}
           {meta ? (
             <span className={`u-label ${dark ? "text-paper/50" : ""}`}>
               {meta}
@@ -40,16 +46,18 @@ export default function SectionHead({
           ) : null}
         </div>
       </Reveal>
-      <div className="grid grid-cols-4 md:grid-cols-12">
-        <TextReveal
-          as="h2"
-          text={title}
-          stagger={55}
-          className={`col-span-4 mt-8 font-sans text-[clamp(2.25rem,5.5vw,5rem)] font-bold leading-[0.95] tracking-tightest md:mt-10 ${
-            dark ? "text-paper" : "text-ink"
-          } ${titleSpan}`}
-        />
-      </div>
+      {title ? (
+        <div className="grid grid-cols-4 md:grid-cols-12">
+          <TextReveal
+            as="h2"
+            text={title}
+            stagger={55}
+            className={`col-span-4 mt-8 font-sans text-[clamp(2.25rem,5.5vw,5rem)] font-bold leading-[0.95] tracking-tightest md:mt-10 ${
+              dark ? "text-paper" : "text-ink"
+            } ${titleSpan}`}
+          />
+        </div>
+      ) : null}
     </header>
   );
 }

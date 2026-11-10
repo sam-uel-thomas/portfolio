@@ -28,21 +28,32 @@ function resolveSiteUrl(): string {
 
 export const site = {
   name: "Sam Thomas",
-  role: "Designer & Developer",
+  // One title, used everywhere: the browser tab, share cards, the hero.
+  role: "Software Engineer",
   /** Absolute origin, no trailing slash. See resolveSiteUrl above. */
   url: resolveSiteUrl(),
   // One-line hero description. Wrap words in *asterisks* to set them in the
   // display serif italic — the accent voice. Use it sparingly, 1–2 per page.
   tagline:
-    "I'm a London-based designer and *full-stack* developer.",
+    "I'm a London-based *software* engineer.",
   description:
-    "I'm a freelance designer and developer, focused on building clean, well-designed systems from end to end.",
+    "I'm a software engineer in London, focused on building clean, well-designed systems from end to end.",
   // Forwarded to the personal inbox via Cloudflare Email Routing.
   email: "hello@madebysamthomas.com",
   location: "London, UK",
   timezone: "Europe/London",
   available: true,
   availabilityLabel: "Available for work",
+  /**
+   * What you're open to, said once, in the footer beside the email. Every
+   * page ends on it, so it's the one place to say what kind of work you want.
+   */
+  openTo: "Open to software engineering roles.",
+  /**
+   * Your CV, as a file in /public, e.g. "/sam-thomas-cv.pdf". Leave it empty
+   * and the footer leaves the link out.
+   */
+  cv: "",
 };
 
 /**
@@ -53,8 +64,6 @@ export const site = {
 export const motion = {
   /** Full-screen intro counter on first visit of a session. */
   intro: true,
-  /** Scroll-velocity-reactive ticker between sections. */
-  marquee: true,
 };
 
 /**
@@ -84,6 +93,9 @@ export type Service = {
   deliverables: string[];
 };
 
+// Not on the home page for now: it was written for freelance clients, and the
+// site is aimed at engineering roles. The section (components/Services.tsx)
+// still works, so adding <Services /> back to app/page.tsx brings it back.
 // TODO(sam): first-draft copy — rewrite in your own words.
 export const services: Service[] = [
   {
@@ -112,13 +124,6 @@ export const services: Service[] = [
   },
 ];
 
-/** Ticker strip content. Kept short — it reads at a glance while moving. */
-export const marqueeItems = [
-  "Full-stack developer",
-  "Available for work",
-  "London, UK",
-];
-
 export type Testimonial = {
   quote: string;
   name: string;
@@ -137,17 +142,33 @@ export const testimonials: Testimonial[] = [];
 export const about = {
   // Two or three sentences. Keep it editorial — confident, no filler.
   paragraphs: [
-    "I'm a full-stack developer with an eye for design. I build anything from web apps to e-commerce, backend included.",
+    "I'm a software engineer with an eye for design. I build anything from web apps to e-commerce, backend included.",
     "Most recently I worked with the team behind *PRNTRS*, a platform for running a print studio online, to take it from a stalled project to production.",
-    "I love working with smaller independent makers, artists and businesses who want a well-designed product without the agency overhead.",
+    // TODO(sam): a first draft, replacing a line pitched at freelance clients.
+    "I care most about the parts people feel: pages that load fast and hold still, motion that explains, and tests that keep it all working.",
+  ],
+  // Shown under the experience list. From your CV (Career/SamThomasCV.pdf),
+  // which gives the graduation date, May 2025.
+  education: [
+    {
+      place: "King’s College London",
+      course: "BSc Computer Science with Artificial Intelligence, First Class Honours",
+      period: "May 2025",
+    },
   ],
   // Stack listed cleanly.
   stack: [
     "TypeScript",
     "React",
     "Next.js",
-    "Tailwind CSS",
     "Node.js",
+    "PostgreSQL",
+    "Drizzle",
+    "Stripe",
+    "Tailwind CSS",
+    "Framer Motion",
+    "Vitest",
+    "Vercel",
     "Figma",
   ],
 };
@@ -219,6 +240,15 @@ export type Project = {
   title: string;
   description: string;
   role: string;
+  /**
+   * When you worked on it, shown in About's experience list. Taken from your
+   * CV (Career/SamThomasCV-source.html), so the two always agree; git can't
+   * date Pollan or PrintDays, whose work went in through Replit under Andy's
+   * account. Leave it out and the project stays off the list.
+   */
+  period?: string;
+  /** Contract work, as the CV marks it. Shown beside the role. */
+  contract?: boolean;
   /** External URL. Leave empty for unreleased work — the row renders unlinked. */
   href: string;
   /** Preview image. Omit and the row falls back to a typographic plate. */
@@ -237,6 +267,7 @@ export const projects: Project[] = [
     description:
       "A platform for running a print studio online. I joined a stalled project and worked with the team to take it to production: team accounts, billing and storefront themes, then security testing, speed and smoother interaction across the product.",
     role: "Software Engineer",
+    period: "Jun 2026 – Present",
     href: "https://prntrs.co/",
     image: "/work/prntrs.webp",
     tags: ["Performance", "Security", "Testing", "Interaction design"],
@@ -275,7 +306,7 @@ export const projects: Project[] = [
       stats: [
         { value: "680 → 96 KB", label: "First download, after splitting the app" },
         { value: "0.49 → 0.002", label: "Worst layout shift on a storefront page" },
-        { value: "0 → 1,400+", label: "Tests in the suite I started, about 520 of them mine" },
+        { value: "0 → 1,400+", label: "Tests in the suite I set up, run on every change" },
       ],
       features: [
         {
@@ -336,7 +367,7 @@ export const projects: Project[] = [
         items: [
           {
             title: "A safety net first",
-            body: "There were no automated tests when I joined. I set the suite up in my first week with 89, around money, plan access and the walls between studios, running on every change. It’s now over 1,400, about 520 of them mine.",
+            body: "There were no automated tests when I joined. I set the suite up in my first week with 89, around money, plan access and the walls between studios, running on every change. It now runs over 1,400 tests.",
           },
           {
             title: "A security test pass",
@@ -366,8 +397,10 @@ export const projects: Project[] = [
   {
     title: "Pollan",
     description:
-      "A SaaS platform that lets independent sellers create products, events, and shops, all sellable with a single link.",
-    role: "Backend Developer",
+      "A payments platform where businesses take bookings through a shareable link. I designed and shipped its booking system and Google Calendar sync, and cut page load times by roughly 80%.",
+    role: "Full Stack Developer",
+    period: "Feb 2026 – Present",
+    contract: true,
     href: "https://pollan.co/",
     image: "/work/pollan.webp",
     // TODO(sam): add tags, e.g. ["Node.js", "Payments", "REST API"]
@@ -375,8 +408,10 @@ export const projects: Project[] = [
   {
     title: "PrintDays",
     description:
-      "A print company platform, with both a customer-facing frontend and a dashboard for admins to track orders and finances.",
-    role: "Full-Stack Developer",
+      "A live ordering platform for a print studio. I was brought in to stabilise and speed it up, fixing DPI and colour handling on artwork uploads and an ordering flow that lost selections between pages.",
+    role: "Full Stack Developer",
+    period: "Dec 2025 – Present",
+    contract: true,
     href: "https://printdays.co.uk/",
     image: "/work/printdays.webp",
     // TODO(sam): add tags

@@ -25,6 +25,8 @@ export default function Section({
   tone = "paper",
 }: SectionProps) {
   const inverted = tone === "ink";
+  // Any section off the page's own white is a panel.
+  const panel = tone !== "paper";
 
   return (
     <section
@@ -32,7 +34,7 @@ export default function Section({
       className={`relative ${toneClasses[tone]} py-24 md:py-32 ${
         // Softened top corners read as a panel laid over the page rather than a
         // band cut out of it — the one place the site isn't perfectly square.
-        inverted ? "rounded-t-[1.75rem] md:rounded-t-[2.5rem]" : ""
+        panel ? "rounded-t-[1.75rem] md:rounded-t-[2.5rem]" : ""
       } ${className}`.trim()}
     >
       {inverted ? <InvertedGridLines /> : null}

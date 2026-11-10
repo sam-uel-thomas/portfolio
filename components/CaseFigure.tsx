@@ -8,6 +8,16 @@ type CaseFigureProps = {
   image: CaseImage;
   /** Wait for the intro overlay to clear as well as for the scroll. */
   start?: "view" | "intro";
+  /**
+   * Show part of the image in a frame of this shape, instead of all of it.
+   * `position` is a CSS object-position, e.g. "100% 50%" keeps the right edge.
+   */
+  crop?: { aspect: string; position?: string };
+  /**
+   * What it sits on. On a dark section the canvas card would glare, so the
+   * mount becomes a faint lift of the dark instead.
+   */
+  tone?: "light" | "dark";
   className?: string;
 };
 
@@ -26,8 +36,11 @@ type CaseFigureProps = {
 export default function CaseFigure({
   image,
   start = "view",
+  crop,
+  tone = "light",
   className = "",
 }: CaseFigureProps) {
+  const dark = tone === "dark";
   const ref = useRef<HTMLElement>(null);
   const [inView, setInView] = useState(false);
   const introReady = useIntroReady();
@@ -57,10 +70,17 @@ export default function CaseFigure({
     <figure ref={ref} className={`fig ${visible ? "is-in" : ""} ${className}`.trim()}>
       <div
         className={`fig-mask overflow-hidden ${
-          image.bare ? "" : "bg-canvas p-3 sm:p-6 md:p-10 lg:p-14"
+          image.bare ? "" : `${dark ? "bg-paper/[0.06]" : "bg-canvas"} p-3 sm:p-6 md:p-10 lg:p-14`
         }`}
       >
-        <div className={image.bare ? "overflow-hidden" : "overflow-hidden border border-ink/10 bg-paper"}>
+        <div
+          className={
+            image.bare
+              ? "overflow-hidden"
+              : `overflow-hidden border bg-paper ${dark ? "border-paper/10" : "border-ink/10"}`
+          }
+          style={crop ? { aspectRatio: crop.aspect } : undefined}
+        >
           {/* Not lazy, on purpose. The browser decides whether a lazy image
               is near the viewport after applying its ancestors' clipping, and
               this one sits inside a mask that's clipped to nothing until it
@@ -74,7 +94,8 @@ export default function CaseFigure({
             width={image.width}
             height={image.height}
             decoding="async"
-            className="fig-img block h-auto w-full"
+            className={`fig-img block w-full ${crop ? "h-full object-cover" : "h-auto"}`}
+            style={crop?.position ? { objectPosition: crop.position } : undefined}
           />
         </div>
       </div>

@@ -19,7 +19,8 @@ export default function PageShell({ children }: { children: React.ReactNode }) {
       <div className="relative z-10 bg-paper">
         <main id="main">{children}</main>
       </div>
-      <FooterReveal>
+      {/* The footer is the contact, so "Contact" links land here, on every page. */}
+      <FooterReveal id="contact">
         <Footer />
       </FooterReveal>
     </>

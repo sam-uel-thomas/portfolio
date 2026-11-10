@@ -388,39 +388,12 @@ export default function CaseStudyPage({ params }: Params) {
         </Section>
 
         {/* ── Closing ───────────────────────────────────────────────────────
-            The page ends on an invitation rather than a row of small links:
-            someone who read this far is the person most likely to get in
-            touch, so the address is right there at full size. */}
+            Just the way back to the rest of the work. Getting in touch is the
+            footer's job, directly below, so the page doesn't ask twice. */}
         <section id="next" className="relative pb-16 md:pb-24">
           <Container>
-            <div className="border-t border-ink/15 pt-16 md:pt-24">
+            <div>
               <Reveal>
-                <p className="u-label text-ink">Next</p>
-              </Reveal>
-              <TextReveal
-                as="p"
-                text="Got a platform like this *in mind*?"
-                stagger={55}
-                className="mt-6 block max-w-5xl font-sans text-[clamp(2.25rem,5.5vw,5rem)] font-bold leading-[0.95] tracking-tightest text-ink"
-              />
-              <Reveal delay={160} className="mt-10 md:mt-14">
-                <Magnetic strength={0.18} padding={20} className="inline-block">
-                  <a
-                    href={`mailto:${site.email}`}
-                    className="group inline-flex max-w-full items-baseline gap-3 break-words font-sans text-[clamp(1rem,4vw,3rem)] font-medium leading-tight tracking-tight text-ink"
-                  >
-                    <span className="u-underline pb-1">{site.email}</span>
-                    <span
-                      aria-hidden="true"
-                      className="text-xl transition-transform duration-500 ease-editorial group-hover:translate-x-1 sm:text-2xl"
-                    >
-                      ↗
-                    </span>
-                  </a>
-                </Magnetic>
-              </Reveal>
-
-              <Reveal className="mt-20 md:mt-28">
                 {/* Back to the top is left to the footer just below, which
                     already has one. */}
                 <div className="border-t border-ink/15 pt-6">

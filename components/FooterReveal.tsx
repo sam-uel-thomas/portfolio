@@ -25,8 +25,15 @@ export function useFooterSpacer() {
  * so it stays correct across breakpoints.
  */
 export default function FooterReveal({
+  id,
   children,
 }: {
+  /**
+   * An anchor for the footer. It goes on the spacer, not the footer: the
+   * footer is fixed, so scrolling to it goes nowhere, but scrolling to the
+   * spacer runs the page to the end, which uncovers the footer in full.
+   */
+  id?: string;
   children: React.ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -46,7 +53,7 @@ export default function FooterReveal({
   return (
     <FooterSpacerContext.Provider value={spacerRef}>
       {/* Transparent spacer the fixed footer shows through at the bottom. */}
-      <div ref={spacerRef} aria-hidden="true" style={{ height }} />
+      <div ref={spacerRef} id={id} aria-hidden="true" style={{ height }} />
       <div ref={ref} className="fixed inset-x-0 bottom-0 z-0">
         {children}
       </div>

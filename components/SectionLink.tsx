@@ -18,10 +18,13 @@ type SectionLinkProps = {
  * becomes a navigation home, behind the page transition, that lands on the
  * section.
  */
+/** Sections in the page frame rather than the home page, so every page has them. */
+const ON_EVERY_PAGE = new Set(["contact"]);
+
 export default function SectionLink({ section, className, children }: SectionLinkProps) {
   const onHome = usePathname() === "/";
 
-  if (onHome) {
+  if (onHome || ON_EVERY_PAGE.has(section)) {
     return (
       <a href={`#${section}`} className={className}>
         {children}

@@ -8,6 +8,10 @@ import LocalTime from "@/components/LocalTime";
 import SectionHead from "@/components/SectionHead";
 import { AccentText } from "@/components/TextReveal";
 import { about, heroRoll, projects, services, site } from "@/content/site";
+import FeaturedWork from "@/components/FeaturedWork";
+import WorkFlagship from "@/components/WorkFlagship";
+import WorkLead from "@/components/WorkLead";
+import WorkSticky from "@/components/WorkSticky";
 import HeroWithWork from "./_specimens/HeroWithWork";
 import LivingSplat from "./_specimens/LivingSplat";
 import NowBoard from "./_specimens/NowBoard";
@@ -92,6 +96,34 @@ const specimens = {
     lives: "Hero, beside your name",
     note: "The hero currently shows no work at all. This stacks your three projects in the empty right half and shuffles them in step with the rolling line, so when it says “SaaS platforms” PRNTRS is the card on top. The stack leans toward the cursor, and replaces the small tagline that repeated the line beside it.",
   },
+  featuredWork: {
+    n: "09",
+    title: "The work, *shown*.",
+    kind: "Layout",
+    lives: "Work, replacing the list",
+    note: "The current Work section is three rows of text, and the screenshots only appear on hover, on desktop. This shows each project as a large image beside its story, swapping sides down the page like the case study does. Images wipe in as they arrive, and the image and the link both open the case study or the live site.",
+  },
+  workFlagship: {
+    n: "10",
+    title: "Flagship and *pair*.",
+    kind: "Layout",
+    lives: "Work, replacing the list",
+    note: "The work, ranked. The project with a case study leads at full width, with its headline numbers beside it, and the other two sit below as a pair, the second dropped a little so they don't read as equal tiles. Give another project a case study and move it up the list, and it takes the lead.",
+  },
+  workSticky: {
+    n: "11",
+    title: "A pinned *showcase*.",
+    kind: "Layout",
+    lives: "Work, replacing the list",
+    note: "The project's name and story hold still on the left while its screenshots scroll past on the right, and the left side changes as the next project arrives. PRNTRS shows its three case study images, so the deepest work gets the longest run. On phones there's nothing to pin, so each project's text sits above its images.",
+  },
+  workLead: {
+    n: "12",
+    title: "Flagship, *fixed*.",
+    kind: "Layout",
+    lives: "Work, replacing 10",
+    note: "Number 10 after the critique. PRNTRS's name, story and numbers now sit beside one picture, so they share a laptop screen instead of arriving a screen and a half later. The picture is the dashboard, not PRNTRS's own homepage, which the hero already shows. Pollan and PrintDays become a compact list sized to the one line each has. The big “Selected works” heading goes, since PRNTRS is the big type now.",
+  },
 } satisfies Record<string, SpecimenInfo>;
 
 
@@ -121,7 +153,7 @@ export default function Playground() {
             <div className="col-span-4 md:col-span-8">
               <p className="u-label mb-6 text-ink">Playground</p>
               <h1 className="font-sans text-[clamp(3rem,9vw,8.5rem)] font-bold leading-[0.88] tracking-tightest text-ink">
-                <AccentText text="Eight *ideas*, all live." />
+                <AccentText text="Twelve *ideas*, all live." />
               </h1>
             </div>
             <p className="col-span-4 self-end text-lg leading-relaxed text-ink/80 md:col-span-4">
@@ -262,6 +294,30 @@ export default function Playground() {
               project.image ? [{ title: project.title, image: project.image }] : [],
             )}
           />
+        </Specimen>
+
+        {/* ── 09 ───────────────────────────────────────────────────────── */}
+        <Specimen info={specimens.featuredWork}>
+          <SectionHead label="Work" title="Selected *works*." />
+          <FeaturedWork projects={projects} />
+        </Specimen>
+
+        {/* ── 10 ───────────────────────────────────────────────────────── */}
+        <Specimen info={specimens.workFlagship}>
+          <SectionHead label="Work" title="Selected *works*." />
+          <WorkFlagship projects={projects} />
+        </Specimen>
+
+        {/* ── 11 ───────────────────────────────────────────────────────── */}
+        <Specimen info={specimens.workSticky}>
+          <SectionHead label="Work" title="Selected *works*." />
+          <WorkSticky projects={projects} />
+        </Specimen>
+
+        {/* ── 12 ───────────────────────────────────────────────────────── */}
+        <Specimen info={specimens.workLead}>
+          <SectionHead label="Selected work" />
+          <WorkLead projects={projects} />
         </Specimen>
 
         <Container className="pb-24 pt-8">

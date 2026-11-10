@@ -146,13 +146,6 @@
     transform: translateY(0);
   }
 
-  /* ── Marquee ─────────────────────────────────────────────────────────── */
-  .marquee-track {
-    display: flex;
-    width: max-content;
-    will-change: transform;
-  }
-
   /* ── Case study figures ───────────────────────────────────────────────────
      The card wipes open from its bottom edge while the picture inside eases
      back from a slight zoom. Hidden only under `.js`, like the type reveals,
@@ -193,10 +186,6 @@
     .js .tr.is-in .tr-inner {
       transform: none;
       transition: none;
-    }
-
-    .marquee-track {
-      transform: none !important;
     }
 
     .js .fig .fig-mask,

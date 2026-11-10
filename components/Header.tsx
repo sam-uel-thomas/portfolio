@@ -6,15 +6,11 @@ import ScrollProgress from "@/components/ScrollProgress";
 import SectionLink from "@/components/SectionLink";
 import { site } from "@/content/site";
 
-// `wide` links only show from `sm` up: four tracked labels plus the wordmark
-// overrun a phone-width bar, and Services is the one a phone visitor reaches
-// just as easily by scrolling.
-//
-// These are home page sections. SectionLink scrolls to them on the home page
-// and navigates back to them from anywhere else.
+// In page order. Work and About are home page sections: SectionLink scrolls
+// to them on the home page and navigates back to them from anywhere else.
+// Contact is the footer, so it scrolls to the end of whichever page you're on.
 const links = [
   { label: "Work", section: "work" },
-  { label: "Services", section: "services", wide: true },
   { label: "About", section: "about" },
   { label: "Contact", section: "contact" },
 ];
@@ -85,7 +81,7 @@ export default function Header() {
             <SectionLink
               key={link.section}
               section={link.section}
-              className={`u-label u-underline hover:text-ink ${link.wide ? "hidden sm:inline" : ""}`}
+              className="u-label u-underline hover:text-ink"
             >
               {link.label}
             </SectionLink>

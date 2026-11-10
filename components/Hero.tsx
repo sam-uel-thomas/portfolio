@@ -36,6 +36,13 @@ export default function Hero() {
               {/* Lags slightly behind the scroll, so the name sits on a plane
                   just behind the rest of the page as it leaves. */}
               <Parallax speed={0.12}>
+                {/* What you are, in plain words, before the name: the first
+                    thing someone hiring looks for. */}
+                <Reveal start="intro">
+                  <p className="u-label mb-6 text-ink md:mb-8">
+                    {site.role} · {site.location}
+                  </p>
+                </Reveal>
                 <h1 className="font-sans text-[clamp(3.5rem,11vw,12rem)] font-bold leading-[0.84] tracking-tightest text-ink">
                   <TextReveal
                     as="span"
