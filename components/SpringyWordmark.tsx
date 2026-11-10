@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useFooterSpacer } from "@/components/FooterReveal";
+import { useIntroStart } from "@/components/Intro";
 import { prefersReducedMotion, stepSpring, type SpringAxis } from "@/lib/motion";
 
 /**
@@ -16,17 +17,30 @@ const LIFT = 0.22;
 const SPREAD = 0.9;
 /** Degrees of lean per letter-height-per-second of vertical speed. */
 const LEAN = 0.25;
-/**
- * Where letters wait before they rise, in letter heights below their resting
- * place. Past 1 because of the padding under the baseline, which would
- * otherwise show the tops of parked letters.
- */
-const PARKED = 1.3;
 
 /**
- * The footer wordmark, with some give in it. Letters spring up out of a mask
- * once the footer is uncovered, and lift in a wave that follows the cursor
- * along the row, swinging back down with a bounce once it's passed.
+ * The rise-in. A CSS transition rather than the spring, because the browser
+ * runs transform transitions on the compositor: they stay smooth while the
+ * main thread is busy, and the rise always lands at a busy moment — a page
+ * arriving, or the footer being uncovered mid-scroll with the smooth scroller
+ * and every scroll effect running. Driven from requestAnimationFrame, as it
+ * used to be, it dropped frames at exactly those moments.
+ *
+ * The curve overshoots by a few percent, so the letters still land with a
+ * small bounce, like the spring did.
+ */
+const RISE_MS = 900;
+const RISE_STAGGER_MS = 45;
+const RISE_EASE = "cubic-bezier(0.34, 1.32, 0.64, 1)";
+
+/**
+ * A wordmark with some give in it. Letters rise out of a mask when the row is
+ * first seen, and lift in a wave that follows the cursor along the row,
+ * swinging back down with a bounce once it's passed.
+ *
+ * Each letter is two nested boxes, one per motion: the outer one carries the
+ * rise (CSS, above), the inner one the cursor spring (JavaScript, below), so
+ * neither has to share a transform with the other.
  *
  * Every letter is a spring chasing a target, and the cursor only ever moves
  * the targets. An earlier version kicked each letter's velocity as the cursor
@@ -34,23 +48,54 @@ const PARKED = 1.3;
  * pass (once for itself, again for each neighbour) — visible as stutter. A
  * moving target keeps every letter's velocity continuous, so it's fluid.
  *
- * Distances use each letter's layout box (offsetLeft/offsetWidth), which
+ * Distances use each letter's outer layout box (offsetLeft/offsetWidth), which
  * transforms don't affect, so a lifted letter can't feed back into its own
  * target. Those boxes only move on resize, so they're measured then.
  */
-export default function SpringyWordmark({ text }: { text: string }) {
+export default function SpringyWordmark({
+  text,
+  typeClassName = "text-center font-sans text-[17cqw] font-bold leading-[0.8] tracking-tightest",
+  waitForIntro = false,
+}: {
+  text: string;
+  /**
+   * Size, weight, alignment and colour of the letters. The default is the
+   * footer's: centred, and sized to fill its container.
+   */
+  typeClassName?: string;
+  /**
+   * Hold the rise until the page is free to animate — for a title that's on
+   * screen at load, which would otherwise rise behind the intro or a page
+   * transition and be finished before anyone sees it.
+   */
+  waitForIntro?: boolean;
+}) {
   const rowRef = useRef<HTMLSpanElement>(null);
+  /** Outer boxes: the rise. */
+  const riseRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  /** Inner boxes: the cursor spring. */
   const letterRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const letters = Array.from(text);
   const spacerRef = useFooterSpacer();
 
+  // Read inside the effect through refs, so readiness arriving doesn't tear
+  // down the springs and start them again.
+  const introStarted = useIntroStart();
+  const readyRef = useRef(!waitForIntro || introStarted);
+  readyRef.current = !waitForIntro || introStarted;
+  const kickRef = useRef<() => void>(() => {});
+  useEffect(() => {
+    if (introStarted) kickRef.current();
+  }, [introStarted]);
+
   useEffect(() => {
     const row = rowRef.current;
     const nodes = letterRefs.current.filter((n): n is HTMLSpanElement => n !== null);
+    const risers = riseRefs.current.filter((n): n is HTMLSpanElement => n !== null);
     if (!row || nodes.length === 0) return;
 
     if (prefersReducedMotion()) {
-      nodes.forEach((node) => (node.style.transform = "none"));
+      risers.forEach((node) => (node.style.transform = "none"));
       return;
     }
 
@@ -58,21 +103,24 @@ export default function SpringyWordmark({ text }: { text: string }) {
     let height = 0;
     let centres: number[] = [];
     let sigma = 1;
+    // Positions come from the outer (rise) boxes. The inner boxes' offsetLeft
+    // is measured from their own outer box, not the row: Chrome treats a
+    // `will-change: transform` element as an offsetParent, so every letter
+    // would report itself as sitting near zero and the wave would spread
+    // evenly along the row instead of following the cursor.
     const measure = () => {
       height = nodes[0].offsetHeight;
-      centres = nodes.map((node) => node.offsetLeft + node.offsetWidth / 2);
-      const total = nodes.reduce((sum, node) => sum + node.offsetWidth, 0);
-      sigma = (total / nodes.length) * SPREAD;
+      centres = risers.map((node) => node.offsetLeft + node.offsetWidth / 2);
+      const total = risers.reduce((sum, node) => sum + node.offsetWidth, 0);
+      sigma = (total / risers.length) * SPREAD;
     };
     measure();
 
-    const springs: SpringAxis[] = nodes.map(() => ({ value: height * PARKED, velocity: 0 }));
-    const risen = nodes.map(() => false);
+    const springs: SpringAxis[] = nodes.map(() => ({ value: 0, velocity: 0 }));
     /** Pointer x within the row, or null when it's elsewhere. */
     let pointer: number | null = null;
 
     const targetFor = (i: number) => {
-      if (!risen[i]) return height * PARKED;
       if (pointer === null || isSpace[i]) return 0;
       const d = (pointer - centres[i]) / sigma;
       return -LIFT * height * Math.exp(-d * d);
@@ -138,36 +186,47 @@ export default function SpringyWordmark({ text }: { text: string }) {
     });
     resize.observe(row);
 
-    // Rise in, staggered, the first time the row is actually seen.
-    const timers: number[] = [];
+    // Rise in, staggered, the first time the row is actually seen. Only the
+    // transition is set here; the browser animates it from there.
     let started = false;
+    let waiting = false;
     const rise = () => {
       if (started) return;
+      // Seen, but the page isn't ready to animate yet: rise when it is.
+      if (!readyRef.current) {
+        waiting = true;
+        return;
+      }
       started = true;
-      nodes.forEach((_, i) => {
-        timers.push(
-          window.setTimeout(() => {
-            risen[i] = true;
-            wake();
-          }, i * 55),
-        );
+      risers.forEach((node, i) => {
+        node.style.transition = `transform ${RISE_MS}ms ${RISE_EASE} ${i * RISE_STAGGER_MS}ms`;
+        node.style.transform = "translate3d(0, 0, 0)";
       });
     };
 
-    // Inside the fixed footer, "seen" means uncovered: the page content has
-    // scrolled up past the middle of the row. Elsewhere, plain visibility.
+    kickRef.current = () => {
+      if (waiting) {
+        waiting = false;
+        rise();
+      }
+    };
+
+    // Inside the fixed footer, "seen" means uncovered. It starts once the
+    // bottom quarter of the row is showing, so the letters are already on
+    // their way up as the rest comes into view; waiting for half the row, as
+    // it used to, left an empty band on screen first, which read as lag.
+    // Elsewhere, plain visibility.
     const spacer = spacerRef?.current;
     let observer: IntersectionObserver | null = null;
     const onScroll = () => {
       if (!spacer) return;
       const rowRect = row.getBoundingClientRect();
-      if (spacer.getBoundingClientRect().top <= rowRect.top + rowRect.height / 2) {
+      if (spacer.getBoundingClientRect().top <= rowRect.top + rowRect.height * 0.75) {
         window.removeEventListener("scroll", onScroll);
         rise();
       }
     };
 
-    nodes.forEach((node, i) => write(node, springs[i]));
     if (spacer) {
       window.addEventListener("scroll", onScroll, { passive: true });
       onScroll();
@@ -178,7 +237,7 @@ export default function SpringyWordmark({ text }: { text: string }) {
           observer?.disconnect();
           rise();
         },
-        { threshold: 0.4 },
+        { threshold: 0.2 },
       );
       observer.observe(row);
     }
@@ -192,7 +251,6 @@ export default function SpringyWordmark({ text }: { text: string }) {
       observer?.disconnect();
       resize.disconnect();
       window.removeEventListener("scroll", onScroll);
-      timers.forEach(window.clearTimeout);
       cancelAnimationFrame(frame);
       row.removeEventListener("pointermove", track);
       row.removeEventListener("pointerdown", track);
@@ -215,18 +273,28 @@ export default function SpringyWordmark({ text }: { text: string }) {
       <span
         ref={rowRef}
         aria-hidden="true"
-        className="relative -mb-[0.12em] block select-none overflow-hidden whitespace-nowrap pb-[0.12em] pt-[0.3em] text-center font-sans text-[17cqw] font-bold leading-[0.8] tracking-tightest"
+        className={`relative -mb-[0.12em] block select-none overflow-hidden whitespace-nowrap pb-[0.12em] pt-[0.3em] ${typeClassName}`}
       >
         {letters.map((letter, i) => (
+          // Parked 130% down, past the padding under the baseline, which
+          // would otherwise show the tops of waiting letters.
           <span
             key={i}
             ref={(node) => {
-              letterRefs.current[i] = node;
+              riseRefs.current[i] = node;
             }}
-            className="inline-block origin-bottom [.js_&]:translate-y-[130%]"
+            className="inline-block [.js_&]:translate-y-[130%]"
             style={{ willChange: "transform" }}
           >
-            {letter === " " ? " " : letter}
+            <span
+              ref={(node) => {
+                letterRefs.current[i] = node;
+              }}
+              className="inline-block origin-bottom"
+              style={{ willChange: "transform" }}
+            >
+              {letter === " " ? " " : letter}
+            </span>
           </span>
         ))}
       </span>

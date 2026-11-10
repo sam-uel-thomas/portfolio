@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { TransitionLink } from "@/components/PageTransition";
 
 type SectionLinkProps = {
   /** A home page section id, without the hash. "top" means the page itself. */
@@ -15,7 +15,8 @@ type SectionLinkProps = {
  *
  * On the home page it's a plain hash link, which the smooth scroller picks up
  * and glides to. Anywhere else there's no such section to glide to, so it
- * becomes a client-side navigation home that lands on the section.
+ * becomes a navigation home, behind the page transition, that lands on the
+ * section.
  */
 export default function SectionLink({ section, className, children }: SectionLinkProps) {
   const onHome = usePathname() === "/";
@@ -29,8 +30,8 @@ export default function SectionLink({ section, className, children }: SectionLin
   }
 
   return (
-    <Link href={section === "top" ? "/" : `/#${section}`} className={className}>
+    <TransitionLink href={section === "top" ? "/" : `/#${section}`} className={className}>
       {children}
-    </Link>
+    </TransitionLink>
   );
 }

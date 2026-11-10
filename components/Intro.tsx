@@ -45,6 +45,16 @@ export function useIntroStart() {
   return ready && painted;
 }
 
+/**
+ * Holds everything inside it back from animating while `hold` is true — for
+ * a page transition, so the incoming page waits behind the cover and makes
+ * its entrance as the cover lifts, instead of playing it unseen.
+ */
+export function IntroGate({ hold, children }: { hold: boolean; children: React.ReactNode }) {
+  const ready = useContext(IntroContext);
+  return <IntroContext.Provider value={ready && !hold}>{children}</IntroContext.Provider>;
+}
+
 const SESSION_KEY = "intro-played";
 
 type Phase = "deciding" | "playing" | "done";

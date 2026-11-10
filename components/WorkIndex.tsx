@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
+import { TransitionLink } from "@/components/PageTransition";
 import Reveal from "@/components/Reveal";
 import type { Project } from "@/content/site";
 import { damp, prefersReducedMotion } from "@/lib/motion";
@@ -109,14 +109,14 @@ export default function WorkIndex({ projects }: { projects: Project[] }) {
         // neither is unreleased, and the row is just a row.
         const caseHref = project.caseStudy ? `/work/${project.caseStudy.slug}` : null;
         const isExternal = !caseHref && project.href.startsWith("http");
-        const RowTag: React.ElementType = caseHref ? Link : isExternal ? "a" : "div";
+        const RowTag: React.ElementType = caseHref ? TransitionLink : isExternal ? "a" : "div";
         const glyph = caseHref ? "→" : isExternal ? "↗" : "◦";
 
         return (
           <Reveal key={project.title} delay={i * 70}>
             <RowTag
               {...(caseHref
-                ? { href: caseHref }
+                ? { href: caseHref, label: project.title }
                 : isExternal
                   ? {
                       href: project.href,

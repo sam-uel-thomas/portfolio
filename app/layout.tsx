@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Instrument_Serif } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Intro from "@/components/Intro";
+import PageTransition from "@/components/PageTransition";
 import SmoothScroll from "@/components/SmoothScroll";
 import { site } from "@/content/site";
 import "./globals.css";
@@ -76,7 +77,9 @@ export default function RootLayout({
           Skip to content
         </a>
         <Intro>
-          <SmoothScroll>{children}</SmoothScroll>
+          <PageTransition>
+            <SmoothScroll>{children}</SmoothScroll>
+          </PageTransition>
         </Intro>
         {/*
           Real-user Core Web Vitals, reported from actual visits rather than a
