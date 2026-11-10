@@ -146,15 +146,6 @@ export const projects: Project[] = [
     image: "/work/printdays.webp",
     // TODO(sam): add tags
   },
-  {
-    title: "Prologue Opera",
-    description:
-      "A site for Prologue Opera, an independent opera company based on the South Coast. Built with a fully functional CMS and a hand-crafted website builder.",
-    role: "Full-Stack Developer",
-    href: "https://prologueopera.com/",
-    image: "/work/prologue-opera.webp",
-    // TODO(sam): add tags
-  },
 ];
 
 export const socials = [
