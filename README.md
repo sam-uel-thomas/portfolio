@@ -4,8 +4,7 @@
 
 # Sam Thomas — Portfolio
 
-**This is the code behind [madebysamthomas.com](https://madebysamthomas.com), my portfolio.**
-I'm a software engineer in London, and I designed and built it.
+**This is the code behind [madebysamthomas.com](https://madebysamthomas.com), my portfolio. Designed and built by me (obviously)**
 
 [**Visit the site ↗**](https://madebysamthomas.com) · [GitHub](https://github.com/sam-uel-thomas) · [LinkedIn](https://www.linkedin.com/in/sam-thomas-45a956293)
 
@@ -19,7 +18,7 @@ I'm a software engineer in London, and I designed and built it.
 <img src=".github/assets/home-scroll.gif" alt="Scrolling the home page from the hero, through the selected work and About, down to the footer that's revealed underneath" width="100%" />
 </div>
 
-I wanted the site to lead with the work, so the home page goes straight from the hero into it. PRNTRS comes first, with the numbers that show what I changed. After that comes About, which I set out like the top of my CV, and the page ends on a footer that's revealed underneath as you scroll. Getting in touch lives there, so every page ends on it.
+I wanted the site to lead with the work, so the home page goes straight from the hero into it. PRNTRS comes first, with stats showing what I brought to the team. After that comes About, which I set out like the top of my CV, and the page ends on a footer that's revealed underneath as you scroll. Getting in touch lives there, so every page ends on it.
 
 ## ✦ Case studies
 
@@ -27,7 +26,7 @@ I wanted the site to lead with the work, so the home page goes straight from the
 <img src=".github/assets/case-study.gif" alt="Opening the PRNTRS case study: a page transition covers the screen with the project name, then the springy wordmark rises and its letters lift under the cursor" width="100%" />
 </div>
 
-A case study opens with the project's name on a cover, then its letters spring into place and lean away from your cursor. The page leads with my role, because that's what someone reading a case study came for. Then it zigzags between screenshots and what I built, and finishes with how I made it fast and safe.
+A case study opens with the project's name on a cover, then its letters spring into place and lean away from your cursor. The page leads with my role, because that's what someone reading a case study came for. Then it zigzags between screenshots and what I built.
 
 <table>
 <tr>
